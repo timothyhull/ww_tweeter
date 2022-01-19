@@ -1,5 +1,5 @@
 ---
-# This action performs a lint of markdown files in the repository
+# This action performs linting and static code analysis
 
 # Name of the action
 name: Markdown Linting
