@@ -23,7 +23,7 @@ def test_current_time(
     capsys: CaptureFixture
 ) -> None:
     """ Test the current_time function.
-    
+
         Args:
             capsys (_pytest.captureCaptureFixture):
                 pytest fixture to capture STDOUT output.
@@ -41,8 +41,7 @@ def test_current_time(
     # Assert the return string matches the test string
     assert f'{DATE_PREFIX}' in date_time, \
            f'{NOW_DAY}' in date_time
-    
 
     # Assert the STDOUT contains the test string
-    assert f'{DATE_PREFIX}' in date_time, \
-           f'{NOW_DAY}' in date_time
+    assert f'{DATE_PREFIX}' in output, \
+           f'{NOW_DAY}' in output

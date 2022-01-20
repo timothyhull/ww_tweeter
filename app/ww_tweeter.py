@@ -12,7 +12,7 @@ from datetime import datetime
 # Initial code for Better Code Hub Analysis
 def current_time() -> str:
     """ Display the current date and time.
-    
+
         Args:
             None.
 
@@ -31,7 +31,7 @@ def current_time() -> str:
 
 def main() -> None:
     """ Main program.
-    
+
         Args:
             None.
 
