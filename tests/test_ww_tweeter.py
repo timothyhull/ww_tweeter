@@ -35,6 +35,9 @@ def test_current_time(
     # Call the current_time function
     date_time = current_time()
 
+    # Display the function output
+    print(date_time)
+
     # Capture STDOUT output
     output = capsys.readouterr().out
 
