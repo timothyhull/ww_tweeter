@@ -3,14 +3,11 @@
 
 # Imports - Python Standard Library
 from datetime import datetime
-from sys import path
 
 # Imports - Third-Party
 from _pytest.capture import CaptureFixture
 
 # Imports - Local
-# Set relative import path
-path.append('/Users/hullt/Dropbox/code/personal/ww-tweeter')
 from app.ww_tweeter import current_time
 
 # Constants
