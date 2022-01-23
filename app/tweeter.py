@@ -6,6 +6,8 @@ from os import getenv
 from collections import namedtuple
 
 # Imports - Third-Party
+from tweepy.api import API
+from tweepy.cursor import Cursor
 import dotenv
 import tweepy
 
@@ -35,14 +37,14 @@ TWITTER_ACCESS_SECRET = getenv('TWITTER_ACCESS_SECRET')
 TWITTER_TIMEOUT = 5
 
 
-def twitter_api_auth() -> tweepy.API:
+def twitter_api_auth() -> API:
     """ Create a Twitter API object with access keys/tokens/secrets.
 
         Args:
             None.
 
         Returns:
-            api (tweepy.API):
+            api (tweepy.api.API):
                 tweepy API object with credentials.
     """
 
@@ -68,19 +70,28 @@ def twitter_api_auth() -> tweepy.API:
 
 
 def get_tweets(
-    api: tweepy.API
-) -> None:
+    api_object: API
+) -> Cursor:
     """ Collect tweets using tweepy.Cursor.
 
         Args:
-            api (tweepy.API):
+            api_object (tweepy.api.API):
                 tweepy API object with credentials.
 
         Returns:
-            None.
+            tweets (tweepy.cursor.Cursor):
+                tweepy Cursor iterator object with tweet data
     """
 
-    return None
+    # Use tweepy.Cursor to get tweets from the Twitter API
+    tweets = tweepy.Cursor(
+        method=api_object.user_timeline,
+        screen_name=TWITTER_ACCOUNT,
+        exclude_replies=False,
+        include_rts=True
+    ).items()
+
+    return tweets
 
 
 def main() -> None:
@@ -93,8 +104,14 @@ def main() -> None:
             None.
     """
 
+    # Create a twitter API authentication object
     api = twitter_api_auth()
-    print(api)
+
+    # Collet tweets from the Twitter API
+    tweets = get_tweets(
+        api_object=api
+    )
+    print(tweets)
 
     return None
 
