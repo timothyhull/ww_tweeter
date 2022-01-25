@@ -3,9 +3,11 @@
 
 # Imports - Python Standard Library
 from types import GeneratorType
+from typing import Dict
 from unittest.mock import MagicMock, patch
 
 # Imports - Third-Party
+from tweepy.api import API
 import tweepy
 
 # Imports - Local
@@ -16,12 +18,89 @@ from app.tweeter import (
 
 # class objects
 class TweepyAPIMock:
+    """ Mock a tweepy.api.API object to retreive mock tweets. """
 
     def __init__(self) -> None:
         return None
 
     def user_timeline(self) -> None:
         return None
+
+
+class Status:
+    """ Mock a Status object in the tweepy.Cursor response object. """
+
+    def __init__(
+        self,
+        mock_api: API,
+        mock_tweets: Dict
+    ) -> None:
+        """ Populate the Status object with mocked attributes.
+
+            Args:
+                mock_api (tweepy.api.API):
+                    mock_api (tweepy.api.API):
+                    Pass a tweepy.api.API object to this argument in
+                    the format "Status(mock_api=API)".
+
+                mock_tweets (Dict):
+                    Pass a dictionary with one or more mocked tweets.
+                    For this test, pass the value TWEET_MOCK in the
+                    format "Status(mock_api=API, mock_json=TWEET_MOCK".
+
+            Returns:
+                None.
+        """
+
+        # Create attributes that match the mocked Status object
+        self._api = mock_api,
+        self._json = mock_tweets
+
+        return None
+
+
+class CursorMock:
+    """ Mock a tweepy.cursor.Cursor object to return mocked tweets. """
+
+    def __init__(
+        self,
+        _status: Status
+    ) -> None:
+        """ Create attributes for a tweepy.cursor.Cursor object.
+
+            Call the items method after creating the self.status
+            attribute.
+
+            Args:
+                _status (Status):
+                    Status class object with _api and _json attributes.
+
+            Returns:
+                None.
+        """
+
+        self._status = _status
+        self.items()
+
+        return None
+
+    def items(self) -> GeneratorType:
+        """ Mock the response to the tweepy.Cursor items method.
+
+            The tweepy.Cursor.items method returns a generator with all
+            tweets.  This function returns a generator with one or more
+            tweets.
+
+            Args:
+                None.
+
+            Yields:
+                self.status (GeneratorType)
+        """
+
+        self.status = self._status
+
+        yield self.status
 
 
 # Constants
@@ -42,21 +121,17 @@ TWEET_MOCK = {
     }
 }
 
+CURSOR_STATUS_MOCK = Status(
+    mock_api=API,
+    mock_tweets=TWEET_MOCK
+)
 
-def tweet_mock() -> GeneratorType:
-    """ Mock one iteration of a tweepy.cursot.Cursor response.
-
-        Args:
-            None.
-
-        Returns:
-            TWEET_MOCK (GeneratorType):
-                Generator function with one available tweet iteration.
-    """
-
-    yield TWEET_MOCK
+CURSOR_MOCK = CursorMock(
+    _status=CURSOR_STATUS_MOCK
+)
 
 
+# Test functions
 def test_twitter_auth() -> None:
     """ Test the twitter_auth function.
 
@@ -81,7 +156,8 @@ def test_twitter_auth() -> None:
 
 @patch.object(
     target=tweepy,
-    attribute='Cursor'
+    attribute='Cursor',
+    return_value=CURSOR_MOCK
 )
 def test_get_tweets(
     cursor: MagicMock
@@ -97,12 +173,13 @@ def test_get_tweets(
     """
 
     # Call the get_tweets function
-    get_tweets(
+    tweets = get_tweets(
         api_object=TWEEPY_API_MOCK
     )
 
-    mocked_tweet = tweet_mock()
+    # Read the next iteration from the tweets generator object
+    tweet_mock = next(tweets)._json
 
-    assert next(mocked_tweet)['text'].startswith('1 in 3')
+    assert tweet_mock.get('text') == TWEET_MOCK.get('text')
 
     return None
