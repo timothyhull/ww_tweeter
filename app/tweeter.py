@@ -2,6 +2,7 @@
 """ Twitter analyzer for #100DaysofCode Days 59+60. """
 
 # Imports - Python Standard Library
+from itertools import islice
 from os import getenv
 from collections import namedtuple
 
@@ -35,6 +36,7 @@ TWITTER_SECRET = getenv('TWITTER_SECRET')
 TWITTER_ACCESS_TOKEN = getenv('TWITTER_ACCESS_TOKEN')
 TWITTER_ACCESS_SECRET = getenv('TWITTER_ACCESS_SECRET')
 TWITTER_TIMEOUT = 5
+TWEET_SLICE = 100
 
 
 def twitter_api_auth() -> API:
@@ -90,6 +92,9 @@ def get_tweets(
         exclude_replies=False,
         include_rts=True
     ).items()
+
+    # Return a slice of the tweets generator object
+    tweets = islice(tweets, TWEET_SLICE)
 
     return tweets
 
