@@ -5,7 +5,7 @@ FROM postgres:14.1-bullseye
 EXPOSE 5432/TCP
 
 # Set the working directory
-WORKDIR /db
+# WORKDIR /db
 
 # Update OS packages
 RUN apt-get update && \
@@ -13,4 +13,4 @@ RUN apt-get update && \
 
 # Start the bash prompt
 # CMD ["postgres -D $PGDATA"]
-ENTRYPOINT ["pg_ctl -D /var/lib/postgresql/data -l logfile start"]
+# ENTRYPOINT ["pg_ctl -D /var/lib/postgresql/data -l logfile start"]

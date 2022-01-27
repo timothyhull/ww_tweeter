@@ -3,14 +3,22 @@ version: "3.9"
 
 services:
   db:
-    build:
-      context: ./_dockerfiles/db
+    # build:
+    #   context: ./_dockerfiles/db
+    image: postgres:14.1-bullseye
+    healthcheck:
+      test: [ "CMD", "pg_isready", "-q", "-d", "postgres", "-U", "root" ]
+      timeout: 45s
+      interval: 10s
+      retries: 10
+    restart: always
     env_file: ./_dockerfiles/db/.env
-    image: db:14.1-bullseye
     ports:
-      - "5432:5432"
+      # - 5432:5432/TCP
+      - 5432:5432
     volumes:
-      - postgres:/data
+      # - ./db_init:postgres/docker-entrypoint-initdb.d/
+      - ./db_init:/docker-entrypoint-initdb.d/
 
-volumes:
-  postgres: {}
+# volumes:
+#   postgres: {}
