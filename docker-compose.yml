@@ -2,23 +2,37 @@
 version: "3.9"
 
 services:
+  # PgAdmin
+  db_admin:
+    image: dpage/pgadmin4
+    restart: always
+    env_file:
+      - ./_dockerfiles/db_admin/.env
+    ports:
+      - 8080:8080/TCP
+
+  # PostgreSQL
   db:
-    # build:
-    #   context: ./_dockerfiles/db
-    image: postgres:14.1-bullseye
+    build:
+      context: ./_dockerfiles/db
+    depends_on:
+      - db_admin
+    # image: postgres:14.1-bullseye
     healthcheck:
       test: [ "CMD", "pg_isready", "-q", "-d", "postgres", "-U", "root" ]
       timeout: 45s
       interval: 10s
       retries: 10
     restart: always
-    env_file: ./_dockerfiles/db/.env
+    env_file:
+      - ./_dockerfiles/db/.env
     ports:
-      # - 5432:5432/TCP
-      - 5432:5432
+      - 5432:5432/TCP
     volumes:
-      # - ./db_init:postgres/docker-entrypoint-initdb.d/
-      - ./db_init:/docker-entrypoint-initdb.d/
+      - ./_dockerfiles/db/db_init:/docker-entrypoint-initdb.d/
 
 # volumes:
-#   postgres: {}
+  # postgres: {}
+
+# networks
+  # TODO
