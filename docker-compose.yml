@@ -19,7 +19,7 @@ services:
       - db_admin
     # image: postgres:14.1-bullseye
     healthcheck:
-      test: [ "CMD", "pg_isready", "-q", "-d", "postgres", "-U", "root" ]
+      test: ["CMD", "pg_isready", "-q", "-d", "postgres", "-U", "root"]
       timeout: 45s
       interval: 10s
       retries: 10
@@ -32,7 +32,7 @@ services:
       - ./_dockerfiles/db/db_init:/docker-entrypoint-initdb.d/
 
 # volumes:
-  # postgres: {}
+#   postgres: {}
 
-# networks
-  # TODO
+# networks:
+#   TODO
