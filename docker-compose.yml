@@ -22,7 +22,6 @@ services:
       context: ./_dockerfiles/db
     depends_on:
       - db_admin
-    # image: postgres:14.1-bullseye
     healthcheck:
       test: ["CMD", "pg_isready", "-q", "-d", "postgres", "-U", "root"]
       timeout: 45s
@@ -38,7 +37,8 @@ services:
     ports:
       - 5432:5432/TCP
     volumes:
-      - ./_dockerfiles/db/db_init:/docker-entrypoint-initdb.d/
+      # - ./_dockerfiles/db/db_init:/docker-entrypoint-initdb.d/
+      - db:/var/lib/postgresql/data
 
 volumes:
   db:
