@@ -1,7 +1,7 @@
 {
     "name": "WW Tweeter",
     "build": {
-        "dockerfile": "../Dockerfile",
+        "dockerfile": "../Dockerfile.dev",
         "context": ".."
     },
     "extensions": [
