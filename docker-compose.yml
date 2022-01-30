@@ -40,6 +40,20 @@ services:
       # - ./_dockerfiles/db/db_init:/docker-entrypoint-initdb.d/
       - db:/var/lib/postgresql/data
 
+  # Application
+  app:
+    build:
+      context: ./
+    depends_on:
+      - db_admin
+      - db
+    env_file:
+      - ./app/.env
+    networks:
+      ww-tweeter:
+        aliases:
+          - app
+
 volumes:
   db:
 
