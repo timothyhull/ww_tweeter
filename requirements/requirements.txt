@@ -11,6 +11,9 @@ ipython
 # Static code analysis
 bandit
 
+# Database ORM
+SQLAlchemy
+
 # Python testing
 pytest
 pytest-cov
