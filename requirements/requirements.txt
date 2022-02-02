@@ -11,8 +11,9 @@ ipython
 # Static code analysis
 bandit
 
-# Database ORM
+# Database ORM and connectivity
 SQLAlchemy
+psycopg2-binary
 
 # Python testing
 pytest
@@ -23,7 +24,5 @@ tweepy
 
 # YAML formatting
 yamllint
-
-# DB interface
 
 # Web service
