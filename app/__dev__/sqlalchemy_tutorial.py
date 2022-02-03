@@ -32,12 +32,12 @@ def sqlalchemy_version() -> str:
     )
 
     # Create a header string
-    header_str = f'{"*" * len(version_str)}'
+    header_str = f'{"*" * (len(version_str) + 4)}'
 
     # Create a formatted header string
     version = (
         f'\n{header_str}\n'
-        f'*{version_str}*\n'
+        f'* {version_str}* \n'
         f'{header_str}\n'
     )
 
@@ -55,7 +55,7 @@ def main() -> None:
     """
 
     # Display SQLAlchemy version
-    sqlalchemy_version()
+    print(sqlalchemy_version())
 
 
 if __name__ == '__main__':
