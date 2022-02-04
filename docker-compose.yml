@@ -33,7 +33,7 @@ services:
     networks:
       ww-tweeter:
         aliases:
-          - db_admin
+          - db
     ports:
       - 5432:5432/TCP
     volumes:
