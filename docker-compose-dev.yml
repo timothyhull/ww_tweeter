@@ -1,0 +1,70 @@
+---
+version: "3.9"
+
+services:
+  # PgAdmin
+  db_admin_dev:
+    image: dpage/pgadmin4
+    restart: always
+    env_file:
+      - ./_dockerfiles/db_admin/.env
+    networks:
+      ww-tweeter_dev:
+        aliases:
+          - db_admin
+          - db_admin_dev
+
+    ports:
+      - 8080:80/TCP
+
+  # PostgreSQL
+  db_dev:
+    build:
+      context: ./_dockerfiles/db
+    depends_on:
+      - db_admin_dev
+    healthcheck:
+      test: ["CMD", "pg_isready", "-q", "-d", "postgres", "-U", "root"]
+      timeout: 45s
+      interval: 10s
+      retries: 10
+    restart: always
+    env_file:
+      - ./_dockerfiles/db/.env
+    networks:
+      ww-tweeter_dev:
+        aliases:
+          - db
+          - db_deb
+    ports:
+      - 5432:5432/TCP
+    volumes:
+      # - ./_dockerfiles/db/db_init:/docker-entrypoint-initdb.d/
+      - db_dev:/var/lib/postgresql/data
+
+  # Application
+  app_dev:
+    build:
+      context: ./
+      dockerfile: Dockerfile.dev
+    command: ["tail", "-f", "/dev/null"]
+    depends_on:
+      - db_admin_dev
+      - db_dev
+    env_file:
+      - ./app/.env
+    networks:
+      ww-tweeter_dev:
+        aliases:
+          - app
+          - app_dev
+    volumes:
+      - ./app:/workspaces/ww-tweeter/app
+      - ./tests:/workspaces/ww-tweeter/tests
+      - ./pytest.ini://workspaces/ww-tweeter/pytest.ini
+
+volumes:
+  db_dev:
+
+networks:
+  ww-tweeter_dev:
