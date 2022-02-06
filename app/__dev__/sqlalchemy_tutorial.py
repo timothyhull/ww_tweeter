@@ -116,25 +116,26 @@ def create_db_engine() -> Engine:
 
 
 def get_user_schema() -> None:
-    """ Get an instance the User class schema.
+    """ Get an instance the User class schema 
 
-        The User class construction takes place via the Declaritive
+        The User class construction takes place via the Declarative
         system.  The Declarative system creates a Table object for the
         users table.
 
         References:
             https://docs.sqlalchemy.org/en/14/orm/tutorial.html#create-a-schema
+            https://docs.sqlalchemy.org/en/14/orm/tutorial.html#create-an-instance-of-the-mapped-class
 
         Args:
             None.
 
         Returns:
             user (User):
-                Instance of the User class
+                Instance of the User class.
     """
 
     # Display the user table schema object
-    user = User.__table__._schema_item_copy
+    user = User
 
     return user
 
@@ -161,8 +162,19 @@ def main() -> None:
     # Display the user table schema
     user = get_user_schema()
     print(
-        f'Users table schema: \n'
-        f'\t{user}\n'
+        'Users table schema:\n'
+        f'{repr(user.__table__)}\n'
+    )
+
+    # Inspect an instance of the User class
+    user_1 = get_user_schema()
+    user_1.name = 'Timothy'
+    user_1.nickname = 'Tim'
+    print(
+        'Users instance:\n'
+        f'\nName: {user_1.name}\n'
+        f'Nickname: {user_1.nickname}\n'
+        f'ID: {repr(user_1.id)}\n'
     )
 
 
