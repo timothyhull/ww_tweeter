@@ -13,7 +13,9 @@ from sqlalchemy import (
     create_engine, Column, Integer, String
 )
 from sqlalchemy.engine import Engine
-from sqlalchemy.orm import declarative_base
+from sqlalchemy.orm import (
+    declarative_base, sessionmaker
+)
 import sqlalchemy
 
 # Imports - Local
@@ -55,6 +57,13 @@ class User(BASE):
         return repr_string
 
 
+# Create custom SQLAlchemy Session class, disable automatic transaction flush
+Session = sessionmaker(
+    autoflush=False
+)
+
+
+# Functions
 def sqlalchemy_version() -> str:
     """ Display the SQLAlchemy version.
 
@@ -103,7 +112,7 @@ def create_db_engine() -> Engine:
 
         Returns:
             engine (sqlalchemy.engine.Engine):
-                SQLAlchemy Engine object.
+                Instance of the SQLAlchemy Engine class.
     """
 
     # Create an sqlalchemy.engine.Engine object
@@ -140,6 +149,69 @@ def get_user_schema() -> None:
     return user
 
 
+def config_session_db_engine(
+    engine: Engine
+) -> None:
+    """ Bind an SQLAlchemy Engine object to a Session object.
+
+        Add an sqlalchemy.engine.Engine binding to the custom Session
+        class.
+
+        References:
+            https://docs.sqlalchemy.org/en/14/orm/tutorial.html#creating-a-session
+
+        Args:
+            engine (sqlalchemy.engine.Engine):
+                Instance of the SQLAlchemy Engine class.
+
+        Returns:
+            session (sqlalchemy.orm.Session):
+                Instance of the Session class with an engine binding.
+    """
+
+    # Configure the Session class with an engine binding
+    Session.configure(
+        bind=engine
+    )
+
+    # Create a Session class instance
+    session = Session()
+
+    return session
+
+
+def add_db_session_user_object(
+    session: sqlalchemy.orm.Session,
+    user_object: User
+) -> sqlalchemy.orm.Session:
+    """ Add User objects to an instance of the sqlalchemy.orm.Session.
+
+        References:
+            https://docs.sqlalchemy.org/en/14/orm/tutorial.html#adding-and-updating-objects
+
+        Args:
+            session (sqlalchemy.orm.Session):
+                Instance of the Session class with an engine binding.
+
+        Returns:
+            session (sqlalchemy.orm.Session):
+                Updated instance of the Session class with a User
+                class in the format:
+                    User(
+                        name='Timothy',
+                        fullname='Timothy Hull',
+                        nickname='Tim'
+                    )
+    """
+
+    # Add the User object to the session instance
+    session.add(
+        instance=user_object
+    )
+
+    return session
+
+
 def main() -> None:
     """ Main program.
 
@@ -157,7 +229,7 @@ def main() -> None:
     engine = create_db_engine()
 
     # Display engine object
-    print(f'Database Engine: "{engine}"\n')
+    print(f'Database engine: "{engine}"\n')
 
     # Display the user table schema
     user = get_user_schema()
@@ -171,10 +243,35 @@ def main() -> None:
     user_1.name = 'Timothy'
     user_1.nickname = 'Tim'
     print(
-        'Users instance:\n'
-        f'\nName: {user_1.name}\n'
+        'User instance:\n'
+        f'Name: {user_1.name}\n'
         f'Nickname: {user_1.nickname}\n'
         f'ID: {repr(user_1.id)}\n'
+    )
+
+    # Bind the Engine instance to a Session instance and display the Session
+    session = config_session_db_engine(
+        engine=engine
+    )
+    print(
+        'SQLAlchemy Session object:\n'
+        f'{repr(session)}\n'
+    )
+
+    # Add user information to the session instance and display the Session
+    new_user = User(
+                name='Timothy',
+                fullname='Timothy Hull',
+                nickname='Tim'
+            )
+    session = add_db_session_user_object(
+        session=session,
+        user_object=new_user
+    )
+    th = session.query(User).filter_by(name="Timothy").first()
+    print(
+        'SQLAlchemy Session object with new user:\n'
+        f'{th is new_user}\n'
     )
 
 
