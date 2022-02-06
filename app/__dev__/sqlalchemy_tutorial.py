@@ -116,7 +116,7 @@ def create_db_engine() -> Engine:
 
 
 def get_user_schema() -> None:
-    """ Get an instance the User class schema 
+    """ Get an instance the User class schema,
 
         The User class construction takes place via the Declarative
         system.  The Declarative system creates a Table object for the
