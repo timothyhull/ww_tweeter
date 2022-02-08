@@ -124,6 +124,32 @@ def create_db_engine() -> Engine:
     return engine
 
 
+def create_db_tables(
+    engine: Engine
+) -> None:
+    """ Create database tables.
+
+        Create database tables for any class object with the
+        BASE object passed as an argument.  For example:
+            class User(BASE: 
+
+        References:
+            https://docs.sqlalchemy.org/en/14/orm/tutorial.html#create-a-schema
+
+        Args:
+            engine (sqlalchemy.engine.Engine):
+                Instance of the SQLAlchemy Engine class.
+
+        Returns:
+            None.
+    """
+
+    # Call the BASE object's create_all method to create database tables
+    BASE.metadata.create_all(engine)
+
+    return None
+
+
 def get_user_schema() -> None:
     """ Get an instance the User class schema,
 
@@ -209,6 +235,9 @@ def add_db_session_user_object(
         instance=user_object
     )
 
+    # Commit the changes to the database
+    session.commit()
+
     return session
 
 
@@ -230,6 +259,11 @@ def main() -> None:
 
     # Display engine object
     print(f'Database engine: "{engine}"\n')
+
+    # Create database tables
+    print('Creating database tables...')
+    create_db_tables(engine)
+    print()
 
     # Display the user table schema
     user = get_user_schema()
