@@ -131,7 +131,7 @@ def create_db_tables(
 
         Create database tables for any class object with the
         BASE object passed as an argument.  For example:
-            class User(BASE: 
+            class User(BASE):
 
         References:
             https://docs.sqlalchemy.org/en/14/orm/tutorial.html#create-a-schema
