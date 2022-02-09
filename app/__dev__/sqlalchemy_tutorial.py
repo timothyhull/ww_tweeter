@@ -21,6 +21,7 @@ import sqlalchemy
 # Imports - Local
 
 # Constants
+AUTO_FLUSH = True
 BASE = declarative_base()
 DB_LOGGING = True
 DB_URL = getenv('DB_TEST_URL')
@@ -59,7 +60,7 @@ class User(BASE):
 
 # Create custom SQLAlchemy Session class, disable automatic transaction flush
 Session = sessionmaker(
-    autoflush=False
+    autoflush=AUTO_FLUSH
 )
 
 
@@ -235,8 +236,14 @@ def add_db_session_user_object(
         instance=user_object
     )
 
+    # Display the in progress session details
+    print(
+        '"session.dirty" output:\n'
+        f'{session.dirty}\n'
+    )
+
     # Commit the changes to the database
-    session.commit()
+    session.commit()  # Not necessary with sessionmaker autoflush set to True
 
     return session
 
@@ -304,7 +311,8 @@ def main() -> None:
     )
     th = session.query(User).filter_by(name="Timothy").first()
     print(
-        'SQLAlchemy Session object with new user:\n'
+        '\nNew user object returned by the database (th) is equal to the '
+        '"new_user" object sent to the database: '
         f'{th is new_user}\n'
     )
 
