@@ -52,7 +52,7 @@ class User(BASE):
         repr_string = (
             f'<User('f'name={self.name}, '
             f'fullname={self.fullname}, '
-            f'nickname={self.fullname})>'
+            f'nickname={self.nickname})>'
         )
 
         return repr_string
@@ -220,6 +220,9 @@ def add_db_session_user_object(
             session (sqlalchemy.orm.Session):
                 Instance of the Session class with an engine binding.
 
+            user (User):
+                Instance of the User class.
+
         Returns:
             session (sqlalchemy.orm.Session):
                 Updated instance of the Session class with a User
@@ -236,14 +239,30 @@ def add_db_session_user_object(
         instance=user_object
     )
 
-    # Display the in progress session details
-    print(
-        '"session.dirty" output:\n'
-        f'{session.dirty}\n'
-    )
+    return session
+
+
+def commit_db_session(
+    session: sqlalchemy.orm.Session
+) -> sqlalchemy.orm.Session:
+    """ Commit staged changes to the sqlalchemy.orm.Session.
+
+        Writes uncommitted changes to the bound database session.
+
+        References:
+            https://docs.sqlalchemy.org/en/14/orm/tutorial.html#adding-and-updating-objects
+
+        Args:
+            session (sqlalchemy.orm.Session):
+                Instance of the Session class with an engine binding.
+
+         Returns:
+            session (sqlalchemy.orm.Session):
+                Instance of the Session class with an engine binding.
+    """
 
     # Commit the changes to the database
-    session.commit()  # Not necessary with sessionmaker autoflush set to True
+    session.commit()
 
     return session
 
@@ -311,9 +330,15 @@ def main() -> None:
     )
     th = session.query(User).filter_by(name="Timothy").first()
     print(
-        '\nNew user object returned by the database (th) is equal to the '
-        '"new_user" object sent to the database: '
+        '\nThe "new_user" object is equal to the object staged for commit '
+        'to the database: '
         f'{th is new_user}\n'
+    )
+
+    # Commit the new user to the database
+    print(
+        'Committing staged changes to the database...\n'
+        f'{commit_db_session(session=session)}\n'
     )
 
 
