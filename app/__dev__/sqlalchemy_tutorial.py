@@ -328,6 +328,7 @@ def main() -> None:
         session=session,
         user_object=new_user
     )
+    print('Querying session object for new user object:')
     th = session.query(User).filter_by(name="Timothy").first()
     print(
         '\nThe "new_user" object is equal to the object staged for commit '
@@ -337,7 +338,7 @@ def main() -> None:
 
     # Commit the new user to the database
     print(
-        'Committing staged changes to the database...\n'
+        '\nCommitting staged changes to the database:\n'
         f'{commit_db_session(session=session)}\n'
     )
 
