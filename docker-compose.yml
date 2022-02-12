@@ -12,9 +12,11 @@ services:
       ww-tweeter:
         aliases:
           - db_admin
-
     ports:
       - 8080:80/TCP
+    volumes:
+      - ./_dockerfiles/db_admin/pg_admin:/var/lib/pgadmin
+      - ./_dockerfiles/db_admin/pg_admin:/pgadmin4/servers.json
 
   # PostgreSQL
   db:

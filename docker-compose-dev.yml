@@ -13,9 +13,11 @@ services:
         aliases:
           - db_admin
           - db_admin_dev
-
     ports:
       - 8080:80/TCP
+    volumes:
+      - ./_dockerfiles/db_admin/pg_admin_dev:/var/lib/pgadmin
+      - ./_dockerfiles/db_admin/pg_admin_dev:/pgadmin4/servers.json
 
   # PostgreSQL
   db_dev:
