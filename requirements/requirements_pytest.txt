@@ -5,5 +5,8 @@ python_dotenv
 pytest
 pytest-cov
 
+# SQLAlchemy
+sqlalchemy
+
 # Twitter
 tweepy
