@@ -13,4 +13,39 @@ from app.db.db import (
 
 # Constants
 
+
 # Test functions
+def test_create_session() -> None:
+    """ """
+
+    return None
+
+
+def test_truncate_tables() -> None:
+    """ """
+
+    return None
+
+
+def test_get_hashtags() -> None:
+    """ """
+
+    return None
+
+
+def test_add_hashtags() -> None:
+    """ """
+
+    return None
+
+
+def test_get_tweets() -> None:
+    """ """
+
+    return None
+
+
+def test_add_tweets() -> None:
+    """ """
+
+    return None
