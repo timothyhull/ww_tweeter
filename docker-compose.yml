@@ -19,6 +19,10 @@ services:
       - ./_dockerfiles/db_admin/pg_admin:/pgadmin4/servers.json
 
   # PostgreSQL
+  ## Initialize DB after first run with the following commands via docker exec:
+  ### psql
+  ### create database ww_tweeter
+  ### create database ww_tweeter_pytest
   db:
     build:
       context: ./_dockerfiles/db
