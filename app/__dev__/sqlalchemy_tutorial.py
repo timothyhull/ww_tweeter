@@ -58,7 +58,7 @@ class User(BASE):
         return repr_string
 
 
-# Create custom SQLAlchemy Session class, disable automatic transaction flush
+# Create custom SQLAlchemy Session class, set automatic transaction flush
 Session = sessionmaker(
     autoflush=AUTO_FLUSH
 )
