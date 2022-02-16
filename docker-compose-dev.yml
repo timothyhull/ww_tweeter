@@ -63,7 +63,7 @@ services:
     volumes:
       - ./app:/workspaces/ww-tweeter/app
       - ./tests:/workspaces/ww-tweeter/tests
-      - ./pytest.ini://workspaces/ww-tweeter/pytest.ini
+      - ./pytest.ini:/workspaces/ww-tweeter/pytest.ini
 
 volumes:
   db_dev:
