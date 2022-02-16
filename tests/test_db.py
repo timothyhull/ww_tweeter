@@ -2,8 +2,10 @@
 """ Tests for db/db.py. """
 
 # Imports - Python Standard Library
+from unittest.mock import patch
 
 # Imports - Third-Party
+import sqlalchemy
 
 # Imports - Local
 from app.db.db import (
@@ -12,11 +14,78 @@ from app.db.db import (
 )
 
 # Constants
+DB_TEST_SESSION_NAME = 'postgresql'
+DB_TEST_SESSION_BINDING = 'postgresql://root:***@db:5432/ww_tweeter_test'
+
+
+# Test classes
+class SQLAlchemyORMSessionMock:
+    """ Mock sqlalchemy.orm.session object. """
+
+    def __init__(self) -> None:
+
+        self.get_bind().name = 'test'
+
+        return None
+
+    def get_bind(self) -> None:
+        """ get_bind method mock.
+
+        Args:
+            None.
+
+        Returns:
+            None.
+        """
+
+        name = DB_TEST_SESSION_NAME
+
+        class URL:
+
+            def __init__(self) -> None:
+
+                self.url = self.render_as_string()
+
+                return None
+
+            def render_as_string(self) -> str:
+                """ render_as_string method mock.
+
+                    Args:
+                        None.
+
+                    Returns:
+                        DB_TEST_SESSION_BINDING (str):
+                            Mock response string.
+                """
+
+                url_string = DB_TEST_SESSION_BINDING
+
+                return url_string
+
+        self.url = URL()
+
+        return self
 
 
 # Test functions
+@patch.object(
+    target=sqlalchemy,
+    attribute='orm.Session'
+)
 def test_create_session() -> None:
-    """ """
+    """ Test the _create_session function.
+
+        Args:
+            None.
+
+        Returns:
+            None.
+    """
+
+    session = _create_session()
+    assert session.get_bind().name == DB_TEST_SESSION_NAME
+    assert session.get_bind().url.render_as_string() == DB_TEST_SESSION_BINDING
 
     return None
 
