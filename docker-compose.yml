@@ -22,7 +22,7 @@ services:
   ## Initialize DB after first run with the following commands via docker exec:
   ### psql
   ### create database ww_tweeter
-  ### create database ww_tweeter_pytest
+  ### create database ww_tweeter_test
   db:
     build:
       context: ./_dockerfiles/db
@@ -59,6 +59,10 @@ services:
       ww-tweeter:
         aliases:
           - app
+    volumes:
+      - ./app:/workspaces/ww-tweeter/app
+      - ./tests:/workspaces/ww-tweeter/tests
+      - ./pytest.ini:/workspaces/ww-tweeter/pytest.ini
 
 volumes:
   db:
