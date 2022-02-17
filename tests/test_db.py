@@ -15,21 +15,17 @@ from app.db.db import (
 
 # Constants
 DB_TEST_SESSION_NAME = 'postgresql'
-# DB_TEST_SESSION_BINDING = 'postgresql://root:***@db:5432/ww_tweeter_test'
-DB_TEST_SESSION_BINDING = 12345
+DB_TEST_SESSION_BINDING = 'postgresql://root:***@db:5432/ww_tweeter_test'
 
 
 # Test classes
 class SQLAlchemyORMSessionMockBindURL:
     """ Mock sqlalchemy.orm.session.get_bind.url object. """
 
-    def __init__(self) -> None:
-
-        self.url = DB_TEST_SESSION_BINDING
-
     def render_as_string(self):
+        url_as_string = DB_TEST_SESSION_BINDING
 
-        return str(self.url)
+        return str(url_as_string)
 
 
 class SQLAlchemyORMSessionMock:
@@ -48,15 +44,15 @@ class SQLAlchemyORMSessionMock:
         return self.get_bind
 
     get_bind.name = DB_TEST_SESSION_NAME
-    get_bind.url = DB_TEST_SESSION_BINDING
+    get_bind.url = SQLAlchemyORMSessionMockBindURL()
 
 
 # Test functions
 @patch.object(
-    target=sqlalchemy,
-    attribute='orm.Session'
+    target=sqlalchemy.orm,
+    attribute='Session'
 )
-def test_create_session() -> None:
+def test_create_session(mock_session) -> None:
     """ Test the _create_session function.
 
         Args:
