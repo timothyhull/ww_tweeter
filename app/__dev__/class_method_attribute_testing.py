@@ -18,7 +18,7 @@ class URL:
 
 
 # Class objects
-class Test():
+class Test:
 
     # Define test method #1
     def test_method(self):
