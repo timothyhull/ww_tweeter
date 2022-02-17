@@ -15,18 +15,25 @@ from app.db.db import (
 
 # Constants
 DB_TEST_SESSION_NAME = 'postgresql'
-DB_TEST_SESSION_BINDING = 'postgresql://root:***@db:5432/ww_tweeter_test'
+# DB_TEST_SESSION_BINDING = 'postgresql://root:***@db:5432/ww_tweeter_test'
+DB_TEST_SESSION_BINDING = 12345
 
 
 # Test classes
-class SQLAlchemyORMSessionMock:
-    """ Mock sqlalchemy.orm.session object. """
+class SQLAlchemyORMSessionMockBindURL:
+    """ Mock sqlalchemy.orm.session.get_bind.url object. """
 
     def __init__(self) -> None:
 
-        self.get_bind().name = 'test'
+        self.url = DB_TEST_SESSION_BINDING
 
-        return None
+    def render_as_string(self):
+
+        return str(self.url)
+
+
+class SQLAlchemyORMSessionMock:
+    """ Mock sqlalchemy.orm.session object. """
 
     def get_bind(self) -> None:
         """ get_bind method mock.
@@ -38,34 +45,10 @@ class SQLAlchemyORMSessionMock:
             None.
         """
 
-        name = DB_TEST_SESSION_NAME
+        return self.get_bind
 
-        class URL:
-
-            def __init__(self) -> None:
-
-                self.url = self.render_as_string()
-
-                return None
-
-            def render_as_string(self) -> str:
-                """ render_as_string method mock.
-
-                    Args:
-                        None.
-
-                    Returns:
-                        DB_TEST_SESSION_BINDING (str):
-                            Mock response string.
-                """
-
-                url_string = DB_TEST_SESSION_BINDING
-
-                return url_string
-
-        self.url = URL()
-
-        return self
+    get_bind.name = DB_TEST_SESSION_NAME
+    get_bind.url = DB_TEST_SESSION_BINDING
 
 
 # Test functions
