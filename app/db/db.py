@@ -87,9 +87,28 @@ session = _create_session()
 
 
 def truncate_tables() -> None:
-    """ """
+    """ Remove all rows from the database tables.
 
-    return None
+        Args:
+            None.
+
+        Returns:
+            session_in_transaction (bool):
+                False if the transaction is complete, True if the
+                transaction is neither committed nor rolled back.
+    """
+
+    # Delete data returned by a query of the TweetData and Hashtag tables
+    session.query(TweetData).delete()
+    session.query(Hashtag).delete()
+
+    # Commit the changes to the database
+    session.commit()
+
+    # Collect the session transaction status
+    session_in_transaction = session.in_transaction()
+
+    return session_in_transaction
 
 
 def get_hashtags() -> None:
