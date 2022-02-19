@@ -70,7 +70,14 @@ def test_create_session(mock_session) -> None:
 
 
 def test_truncate_tables() -> None:
-    """ """
+    """ Test the truncate_tables function.
+
+        Args:
+            None.
+
+        Returns:
+            None.
+    """
 
     return None
 
