@@ -6,11 +6,34 @@
 """
 
 
-# Define a session class for the test methods
-class Session:
+# Define a QueryMock class for the SessionMock.query method response object
+class QueryMock:
+    """ Mock of the Session.query method response object. """
+
+    def delete(self) -> str:
+        """ Mock of the delete method.
+
+            Args:
+                None.
+
+            Returns:
+                None.
+        """
+
+        return None
+
+
+# Define a SessionMock class for the test methods
+class SessionMock:
     """ Mock of the sqlalchemy.orm.Session class. """
 
-    def commit() -> None:
+    def __init__(self) -> None:
+        """ Class initialization method. """
+
+        # Initialize an empty list for database transactions
+        self.transactions = []
+
+    def commit(self) -> None:
         """ Mock of the commit method.
 
             Args:
@@ -20,24 +43,37 @@ class Session:
                 None.
         """
 
+        # Clear the list of transactions
+        self.transactions.clear()
+
         return None
 
-    def in_transaction(self) -> None:
+    def in_transaction(self) -> bool:
         """ Mock of the in_transaction method.
+
+            A return value of False indicates the session has been
+            committed, while a return value of True indicates the
+            session has pending transactions and is not committed.
 
             Args:
                 None.
 
             Returns:
-                None.
+                in_transaction (bool).
         """
 
-        return None
+        # Determine if the self.transactions list is contains items, or not
+        if self.transactions:
+            in_transaction = True
+        else:
+            in_transaction = False
+
+        return in_transaction
 
     def query(
         self,
         db_table: str
-    ) -> None:
+    ) -> QueryMock:
         """ Mock of the query method.
 
             Args:
@@ -47,14 +83,10 @@ class Session:
                 None.
         """
 
-        def delete() -> None:
-            """ Mock of the delete method.
+        # Create an instance of QueryMock
+        query_mock = QueryMock()
 
-                Args:
-                    None.
+        # Append the return value to self.transactions
+        self.transactions.append(query_mock)
 
-                Returns:
-                    None.
-            """
-
-        return None
+        return QueryMock()
