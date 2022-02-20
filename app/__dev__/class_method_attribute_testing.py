@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-""" Tests for adding attributes to class methods.
+""" Tests for adding attributes with methods to class methods.
 
     The intent is to return two objects:
         test_method_1().name
