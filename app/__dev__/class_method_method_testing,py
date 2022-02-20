@@ -1,0 +1,60 @@
+#!/usr/bin/env python3
+""" Tests for adding attributes with methods to class methods.
+
+    The intent is to return an object in the format:
+        class.method_1(argument).method_2()
+"""
+
+
+# Define a session class for the test methods
+class Session:
+    """ Mock of the sqlalchemy.orm.Session class. """
+
+    def commit() -> None:
+        """ Mock of the commit method.
+
+            Args:
+                None.
+
+            Returns:
+                None.
+        """
+
+        return None
+
+    def in_transaction(self) -> None:
+        """ Mock of the in_transaction method.
+
+            Args:
+                None.
+
+            Returns:
+                None.
+        """
+
+        return None
+
+    def query(
+        self,
+        db_table: str
+    ) -> None:
+        """ Mock of the query method.
+
+            Args:
+                None.
+
+            Return:
+                None.
+        """
+
+        def delete() -> None:
+            """ Mock of the delete method.
+
+                Args:
+                    None.
+
+                Returns:
+                    None.
+            """
+
+        return None
