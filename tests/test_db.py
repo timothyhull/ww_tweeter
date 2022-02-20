@@ -47,6 +47,92 @@ class SQLAlchemyORMSessionMock:
     get_bind.url = SQLAlchemyORMSessionMockBindURL()
 
 
+# Define a QueryMock class for the SessionMock.query method response object
+class QueryMock:
+    """ Mock of the Session.query method response object. """
+
+    def delete(self) -> str:
+        """ Mock of the delete method.
+
+            Args:
+                None.
+
+            Returns:
+                None.
+        """
+
+        return None
+
+
+# Define a SessionMock class for the test methods
+class SessionMock:
+    """ Mock of the sqlalchemy.orm.Session class. """
+
+    def __init__(self) -> None:
+        """ Class initialization method. """
+
+        # Initialize an empty list for database transactions
+        self.transactions = []
+
+    def commit(self) -> None:
+        """ Mock of the commit method.
+
+            Args:
+                None.
+
+            Returns:
+                None.
+        """
+
+        # Clear the list of transactions
+        self.transactions.clear()
+
+        return None
+
+    def in_transaction(self) -> bool:
+        """ Mock of the in_transaction method.
+
+            A return value of False indicates the session has been
+            committed, while a return value of True indicates the
+            session has pending transactions and is not committed.
+
+            Args:
+                None.
+
+            Returns:
+                in_transaction (bool).
+        """
+
+        # Determine if the self.transactions list is contains items, or not
+        if self.transactions:
+            in_transaction = True
+        else:
+            in_transaction = False
+
+        return in_transaction
+
+    def query(
+        self,
+        db_table: str
+    ) -> QueryMock:
+        """ Mock of the query method.
+
+            Args:
+                None.
+
+            Return:
+                None.
+        """
+
+        # Create an instance of QueryMock
+        query_mock = QueryMock()
+
+        # Append the return value to self.transactions
+        self.transactions.append(query_mock)
+
+        return QueryMock()
+
+
 # Test functions
 @patch.object(
     target=sqlalchemy.orm,
@@ -69,7 +155,28 @@ def test_create_session(mock_session) -> None:
     return None
 
 
-def test_truncate_tables() -> None:
+@patch.object(
+    target=sqlalchemy.orm.Query,
+    attribute='delete'
+)
+@patch.object(
+    target=sqlalchemy.orm.Query,
+    attribute='delete'
+)
+@patch.object(
+    target=sqlalchemy.orm.Session,
+    attribute='commit'
+)
+@patch.object(
+    target=sqlalchemy.orm.Session,
+    attribute='in_transaction'
+)
+def test_truncate_tables(
+    session_query_1,
+    session_query_2,
+    session_commit,
+    session_in_transaction
+) -> None:
     """ Test the truncate_tables function.
 
         A return value of False indicates the session successfully
@@ -82,6 +189,12 @@ def test_truncate_tables() -> None:
         Returns:
             None.
     """
+
+    session = SessionMock()
+    session_query_1.return_value = session.query('TweetData').delete()
+    session_query_2.return_value = session.query('Hashtag').delete()
+    session_commit.return_value = session.commit()
+    session_in_transaction.return_value = session.in_transaction()
 
     assert truncate_tables() is False
 
