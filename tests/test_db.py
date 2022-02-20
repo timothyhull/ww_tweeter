@@ -72,12 +72,18 @@ def test_create_session(mock_session) -> None:
 def test_truncate_tables() -> None:
     """ Test the truncate_tables function.
 
+        A return value of False indicates the session successfully
+        committed, while a return value of True indicates the session
+        has pending transactions and did not successfully commit.
+
         Args:
             None.
 
         Returns:
             None.
     """
+
+    assert truncate_tables() is False
 
     return None
 
