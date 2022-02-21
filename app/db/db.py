@@ -82,8 +82,9 @@ def _create_session() -> sqlalchemy.orm.Session:
     return session
 
 
-# Create a global session object
-session = _create_session()
+# Create a global session object, if pytest is not in scope
+if 'pytest' not in argv[0]:
+    session = _create_session()
 
 
 def truncate_tables() -> None:

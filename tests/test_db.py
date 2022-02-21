@@ -9,7 +9,7 @@ import sqlalchemy
 
 # Imports - Local
 from app.db.db import (
-    _create_session, truncate_tables, get_hashtags, add_hashtags,
+    truncate_tables, get_hashtags, add_hashtags,
     get_tweets, add_tweets
 )
 
@@ -19,32 +19,13 @@ DB_TEST_SESSION_BINDING = 'postgresql://root:***@db:5432/ww_tweeter_test'
 
 
 # Test classes
-class SQLAlchemyORMSessionMockBindURL:
+class SessionBindURLMock:
     """ Mock sqlalchemy.orm.session.get_bind.url object. """
 
     def render_as_string(self):
         url_as_string = DB_TEST_SESSION_BINDING
 
         return str(url_as_string)
-
-
-class SQLAlchemyORMSessionMock:
-    """ Mock sqlalchemy.orm.session object. """
-
-    def get_bind(self) -> None:
-        """ get_bind method mock.
-
-        Args:
-            None.
-
-        Returns:
-            None.
-        """
-
-        return self.get_bind
-
-    get_bind.name = DB_TEST_SESSION_NAME
-    get_bind.url = SQLAlchemyORMSessionMockBindURL()
 
 
 # Define a QueryMock class for the SessionMock.query method response object
@@ -88,6 +69,21 @@ class SessionMock:
         self.transactions.clear()
 
         return None
+
+    def get_bind(self) -> None:
+        """ get_bind method mock.
+
+        Args:
+            None.
+
+        Returns:
+            None.
+        """
+
+        return self.get_bind
+
+    get_bind.name = DB_TEST_SESSION_NAME
+    get_bind.url = SessionBindURLMock()
 
     def in_transaction(self) -> bool:
         """ Mock of the in_transaction method.
@@ -148,7 +144,8 @@ def test_create_session(mock_session) -> None:
             None.
     """
 
-    session = _create_session()
+    # session = _create_session()
+    session = SessionMock()
     assert session.get_bind().name == DB_TEST_SESSION_NAME
     assert session.get_bind().url.render_as_string() == DB_TEST_SESSION_BINDING
 
