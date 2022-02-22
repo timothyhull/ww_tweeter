@@ -5,6 +5,7 @@
 from os import getenv
 import re
 from sys import argv
+from typing import List
 
 # Imports - Third-Party
 from sqlalchemy import create_engine
@@ -119,10 +120,26 @@ def truncate_tables(
     return session_in_transaction
 
 
-def get_hashtags() -> None:
-    """ """
+def get_hashtags(
+    session: sqlalchemy.orm.Session = session
+) -> List:
+    """ Get all hashtags from the database.
 
-    return None
+        Args:
+            session (sqlalchemy.orm.Session, optional):
+                By default, uses the session object created by the
+                _create_session function.  Allows the ability to pass a
+                mock Session object for pytest testing.
+
+        Returns:
+            hashtags (List):
+                All entries in the hashtags table.
+    """
+
+    # Retreive and sort all entries from the hashtags table
+    hashtags = session.query(Hashtag).order_by(Hashtag.name.asc()).all()
+
+    return hashtags
 
 
 def add_hashtags() -> None:
