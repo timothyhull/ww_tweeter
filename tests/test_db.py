@@ -2,7 +2,7 @@
 """ Tests for db/db.py. """
 
 # Imports - Python Standard Library
-from unittest.mock import patch
+from unittest.mock import MagicMock, patch
 
 # Imports - Third-Party
 import sqlalchemy
@@ -134,18 +134,22 @@ class SessionMock:
     target=sqlalchemy.orm,
     attribute='Session'
 )
-def test_create_session(mock_session) -> None:
+def test_create_session(
+    mock_session: MagicMock
+) -> None:
     """ Test the _create_session function.
 
         Args:
-            None.
+            mock_session (unittest.mock.MagicMock):
+                unittest MagicMock object
 
         Returns:
             None.
     """
 
-    # session = _create_session()
+    # Create a mock Session object
     session = SessionMock()
+
     assert session.get_bind().name == DB_TEST_SESSION_NAME
     assert session.get_bind().url.render_as_string() == DB_TEST_SESSION_BINDING
 
@@ -153,47 +157,36 @@ def test_create_session(mock_session) -> None:
 
 
 @patch.object(
-    target=sqlalchemy.orm.Query,
-    attribute='delete'
-)
-@patch.object(
-    target=sqlalchemy.orm.Query,
-    attribute='delete'
-)
-@patch.object(
-    target=sqlalchemy.orm.Session,
-    attribute='commit'
-)
-@patch.object(
-    target=sqlalchemy.orm.Session,
-    attribute='in_transaction'
+    target=sqlalchemy.orm,
+    attribute='Session'
 )
 def test_truncate_tables(
-    session_query_1,
-    session_query_2,
-    session_commit,
-    session_in_transaction
+    mock_session: MagicMock
 ) -> None:
     """ Test the truncate_tables function.
 
-        A return value of False indicates the session successfully
-        committed, while a return value of True indicates the session
-        has pending transactions and did not successfully commit.
+        A call to truncate_tables will return False when the session
+        successfully commits, while a return value of True indicates
+        the session has pending transactions and did not successfully
+        commit.
 
         Args:
-            None.
+            mock_session (unittest.mock.MagicMock):
+                unittest MagicMock object
 
         Returns:
             None.
     """
 
+    # Create a mock Session object
     session = SessionMock()
-    session_query_1.return_value = session.query('TweetData').delete()
-    session_query_2.return_value = session.query('Hashtag').delete()
-    session_commit.return_value = session.commit()
-    session_in_transaction.return_value = session.in_transaction()
 
-    assert truncate_tables() is False
+    # Call truncate_tables and pass the mock Session object
+    session_in_transaction = truncate_tables(
+        session=session
+    )
+
+    assert session_in_transaction is False
 
     return None
 

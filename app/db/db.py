@@ -82,16 +82,23 @@ def _create_session() -> sqlalchemy.orm.Session:
     return session
 
 
-# Create a global session object, if pytest is not in scope
-if 'pytest' not in argv[0]:
+# Create a session object using _create_session, or set to None for pytest
+if 'pytest' in argv[0]:
+    session = None
+else:
     session = _create_session()
 
 
-def truncate_tables() -> None:
+def truncate_tables(
+    session: sqlalchemy.orm.Session = session
+) -> None:
     """ Remove all rows from the database tables.
 
         Args:
-            None.
+            session (sqlalchemy.orm.Session, optional):
+                By default, uses the session object created by the
+                _create_session function.  Allows the ability to pass a
+                mock Session object for pytest testing.
 
         Returns:
             session_in_transaction (bool):
