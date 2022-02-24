@@ -2,6 +2,8 @@
 """ Tests for db/db.py. """
 
 # Imports - Python Standard Library
+import re
+from typing import Callable, List
 from unittest.mock import MagicMock, patch
 
 # Imports - Third-Party
@@ -16,6 +18,7 @@ from app.db.db import (
 # Constants
 DB_TEST_SESSION_NAME = 'postgresql'
 DB_TEST_SESSION_BINDING = 'postgresql://root:***@db:5432/ww_tweeter_test'
+GET_HASHTAGS_RESPONSE = [1, 'hashtag_1', 25]
 
 
 # Test classes
@@ -26,6 +29,38 @@ class SessionBindURLMock:
         url_as_string = DB_TEST_SESSION_BINDING
 
         return str(url_as_string)
+
+
+# Define an OrderByMock class for the test methods
+class OrderByMock:
+    """ Mock of the Session.query.orderby method response object. """
+
+    def __init__(
+        self,
+        results: List
+    ) -> None:
+        """ Class initialization method. """
+
+        self.results = results
+
+        return None
+
+    def all(self) -> List:
+        """ Mock of the order_by.all method.
+
+            Args:
+                results:
+                    Mock result set of all results.
+
+            Returns:
+                self.results (List):
+                    Mock list of all objects in a call of the
+                    query.order_by().all() method.
+        """
+
+        print(f'\n** {self.results} **\n')
+
+        return self.results
 
 
 # Define a QueryMock class for the SessionMock.query method response object
@@ -43,6 +78,24 @@ class QueryMock:
         """
 
         return None
+
+    def order_by(
+        self,
+        criterion
+    ) -> List:
+        """ Mock of the order_by method.
+
+            Args:
+                criterion:
+                    Mock criterion to order results by, in the form of
+                    a database class attribute (Hashtag.name.asc()).
+
+            Returns:
+                criterion (List):
+                    Mock sorted list of results.
+        """
+
+        return OrderByMock(results=criterion)
 
 
 # Define a SessionMock class for the test methods
@@ -70,14 +123,15 @@ class SessionMock:
 
         return None
 
-    def get_bind(self) -> None:
+    def get_bind(self) -> Callable:
         """ get_bind method mock.
 
         Args:
             None.
 
         Returns:
-            None.
+            self.get_bind (Callable):
+                Callable self.get_bind object.
         """
 
         return self.get_bind
@@ -126,7 +180,7 @@ class SessionMock:
         # Append the return value to self.transactions
         self.transactions.append(query_mock)
 
-        return QueryMock()
+        return query_mock
 
 
 # Test functions
@@ -141,7 +195,7 @@ def test_create_session(
 
         Args:
             mock_session (unittest.mock.MagicMock):
-                unittest MagicMock object
+                unittest MagicMock object.
 
         Returns:
             None.
@@ -172,7 +226,7 @@ def test_truncate_tables(
 
         Args:
             mock_session (unittest.mock.MagicMock):
-                unittest MagicMock object
+                unittest MagicMock object.
 
         Returns:
             None.
@@ -191,8 +245,31 @@ def test_truncate_tables(
     return None
 
 
-def test_get_hashtags() -> None:
-    """ """
+@patch.object(
+    target=sqlalchemy.orm,
+    attribute='Session',
+    return_value=GET_HASHTAGS_RESPONSE
+)
+def test_get_hashtags(
+    mock_session: MagicMock
+) -> None:
+    """ Test the get_hashtags function.
+
+        Args:
+            mock_session (unittest.mock.MagicMock):
+                unittest MagicMock object.
+
+        Returns:
+            None.
+    """
+
+    session = SessionMock()
+
+    hashtags = get_hashtags(
+        session=session
+    )
+
+    assert hashtags == GET_HASHTAGS_RESPONSE
 
     return None
 
