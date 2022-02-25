@@ -129,7 +129,7 @@ class SessionMock(QueryMock):
                 None.
 
             Return:
-                QueryMock (class):
+                query_mock (class):
                     Instance of the QueryMock class.
         """
 
