@@ -37,30 +37,27 @@ class OrderByMock:
 
     def __init__(
         self,
-        results: List
-    ) -> None:
+        query_result: List
+    ) -> List:
         """ Class initialization method. """
 
-        self.results = results
+        # Set an instance variable based on the query_result argument
+        self.query_result = GET_HASHTAGS_RESPONSE
 
         return None
 
     def all(self) -> List:
-        """ Mock of the order_by.all method.
+        """ Mock of the all method.
 
             Args:
-                results:
-                    Mock result set of all results.
+                None.
 
             Returns:
-                self.results (List):
-                    Mock list of all objects in a call of the
-                    query.order_by().all() method.
+                self.query_result (List):
+                    Mock of all objects returned by a query.
         """
 
-        print(f'\n** {self.results} **\n')
-
-        return self.results
+        return self.query_result
 
 
 # Define a QueryMock class for the SessionMock.query method response object
@@ -91,15 +88,18 @@ class QueryMock:
                     a database class attribute (Hashtag.name.asc()).
 
             Returns:
-                criterion (List):
-                    Mock sorted list of results.
+                ordered_query (List):
+                    Mock ordered list of query results.
         """
 
-        return OrderByMock(results=criterion)
+        # Create a mock ordered list of query results
+        ordered_query = OrderByMock(query_result=criterion)
+
+        return ordered_query
 
 
 # Define a SessionMock class for the test methods
-class SessionMock:
+class SessionMock(QueryMock):
     """ Mock of the sqlalchemy.orm.Session class. """
 
     def __init__(self) -> None:
@@ -171,7 +171,8 @@ class SessionMock:
                 None.
 
             Return:
-                None.
+                query_mock (class):
+                    Instance of the QueryMock class.
         """
 
         # Create an instance of QueryMock
@@ -202,10 +203,11 @@ def test_create_session(
     """
 
     # Create a mock Session object
-    session = SessionMock()
+    session_mock = SessionMock()
 
-    assert session.get_bind().name == DB_TEST_SESSION_NAME
-    assert session.get_bind().url.render_as_string() == DB_TEST_SESSION_BINDING
+    assert session_mock.get_bind().name == DB_TEST_SESSION_NAME
+    assert session_mock.get_bind().url.render_as_string() == \
+        DB_TEST_SESSION_BINDING
 
     return None
 
@@ -233,11 +235,11 @@ def test_truncate_tables(
     """
 
     # Create a mock Session object
-    session = SessionMock()
+    session_mock = SessionMock()
 
     # Call truncate_tables and pass the mock Session object
     session_in_transaction = truncate_tables(
-        session=session
+        session=session_mock
     )
 
     assert session_in_transaction is False
@@ -247,8 +249,7 @@ def test_truncate_tables(
 
 @patch.object(
     target=sqlalchemy.orm,
-    attribute='Session',
-    return_value=GET_HASHTAGS_RESPONSE
+    attribute='Session'
 )
 def test_get_hashtags(
     mock_session: MagicMock
@@ -263,10 +264,10 @@ def test_get_hashtags(
             None.
     """
 
-    session = SessionMock()
+    session_mock = SessionMock()
 
     hashtags = get_hashtags(
-        session=session
+        session=session_mock
     )
 
     assert hashtags == GET_HASHTAGS_RESPONSE
