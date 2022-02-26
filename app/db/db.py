@@ -5,7 +5,7 @@
 from os import getenv
 import re
 from sys import argv
-from typing import List
+from typing import Dict, List
 
 # Imports - Third-Party
 from sqlalchemy import create_engine
@@ -90,10 +90,10 @@ else:
     session = _create_session()
 
 
-def truncate_tables(
+def commit_session(
     session: sqlalchemy.orm.Session = session
-) -> None:
-    """ Remove all rows from the database tables.
+) -> bool:
+    """ Commit the SQLAlchemy session to the database.
 
         Args:
             session (sqlalchemy.orm.Session, optional):
@@ -107,10 +107,6 @@ def truncate_tables(
                 transaction is neither committed nor rolled back.
     """
 
-    # Delete data returned by a query of the TweetData and Hashtag tables
-    session.query(TweetData).delete()
-    session.query(Hashtag).delete()
-
     # Commit the changes to the database
     session.commit()
 
@@ -118,6 +114,35 @@ def truncate_tables(
     session_in_transaction = session.in_transaction()
 
     return session_in_transaction
+
+
+def truncate_tables(
+    session: sqlalchemy.orm.Session = session
+) -> bool:
+    """ Remove all rows from the database tables.
+
+        Args:
+            session (sqlalchemy.orm.Session, optional):
+                By default, uses the session object created by the
+                _create_session function.  Allows the ability to pass a
+                mock Session object for pytest testing.
+
+        Returns:
+            session_active (bool):
+                False if the transaction is complete, True if the
+                transaction is neither committed nor rolled back.
+    """
+
+    # Delete data returned by a query of the TweetData and Hashtag tables
+    session.query(TweetData).delete()
+    session.query(Hashtag).delete()
+
+    # Commit the changes to the database
+    session_active = commit_session(
+        session=session
+    )
+
+    return session_active
 
 
 def get_hashtags(
@@ -142,8 +167,17 @@ def get_hashtags(
     return hashtags
 
 
-def add_hashtags() -> None:
-    """ """
+def add_hashtags(
+    hashtag_count: Dict
+) -> None:
+    """ Add hashtags to the database.
+
+        Args:
+            None.
+
+        Returns:
+            None.
+    """
 
     return None
 
