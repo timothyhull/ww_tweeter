@@ -11,8 +11,8 @@ import sqlalchemy
 
 # Imports - Local
 from app.db.db import (
-    truncate_tables, get_hashtags, add_hashtags,
-    get_tweets, add_tweets
+    commit_session, truncate_tables, get_hashtags,
+    add_hashtags, get_tweets, add_tweets
 )
 
 # Constants
@@ -185,6 +185,36 @@ class SessionMock(QueryMock):
 
 
 # Test functions
+@patch.object(
+    target=sqlalchemy.orm,
+    attribute='Session'
+)
+def test_commit_session(
+    mock_session: MagicMock
+) -> None:
+    """ Test the commit_session function.
+
+        Args:
+            mock_session (unittest.mock.MagicMock):
+                unittest MagicMock object.
+
+        Returns:
+            None.
+    """
+
+    # Create a mock Session object
+    session_mock = SessionMock()
+
+    # Call commit_session and pass the mock Session object
+    session_in_transaction = commit_session(
+        session=session_mock
+    )
+
+    assert session_in_transaction is False
+
+    return None
+
+
 @patch.object(
     target=sqlalchemy.orm,
     attribute='Session'
