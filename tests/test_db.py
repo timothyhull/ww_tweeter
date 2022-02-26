@@ -2,7 +2,6 @@
 """ Tests for db/db.py. """
 
 # Imports - Python Standard Library
-import re
 from typing import Callable, List
 from unittest.mock import MagicMock, patch
 
@@ -18,7 +17,12 @@ from app.db.db import (
 # Constants
 DB_TEST_SESSION_NAME = 'postgresql'
 DB_TEST_SESSION_BINDING = 'postgresql://root:***@db:5432/ww_tweeter_test'
-GET_HASHTAGS_RESPONSE = [1, 'hashtag_1', 25]
+GET_HASHTAGS_RESPONSE = [1, 'hashtag_1', 10]
+NEW_HASHTAGS = {
+    'hashtag_1': 10,
+    'hashtag_2': 20,
+    'hashtag_3': 30,
+}
 
 
 # Test classes
@@ -108,6 +112,25 @@ class SessionMock(QueryMock):
         # Initialize an empty list for database transactions
         self.transactions = []
 
+    def add(
+        self,
+        instance: str
+    ) -> None:
+        """ Mock of the add method.
+
+            Args:
+                instance (str):
+                    Placeholder/mock for database table class.
+
+            Returns:
+                None.
+        """
+
+        # Add a mock transaction to the transactions list
+        self.transactions.append(instance)
+
+        return None
+
     def commit(self) -> None:
         """ Mock of the commit method.
 
@@ -163,16 +186,17 @@ class SessionMock(QueryMock):
 
     def query(
         self,
-        db_table: str
+        instance: str
     ) -> QueryMock:
         """ Mock of the query method.
 
             Args:
-                None.
+                instance (str):
+                    Database table class definition.
 
             Return:
                 query_mock (class):
-                    Instance of the QueryMock class.
+                    Placeholder/mock for database table class.
         """
 
         # Create an instance of QueryMock
@@ -305,8 +329,33 @@ def test_get_hashtags(
     return None
 
 
-def test_add_hashtags() -> None:
-    """ """
+@patch.object(
+    target=sqlalchemy.orm,
+    attribute='Session'
+)
+def test_add_hashtags(
+    mock_session: MagicMock
+) -> None:
+    """ Test the add_hashtags function.
+
+        Args:
+            mock_session (unittest.mock.MagicMock):
+                unittest MagicMock object.
+
+        Returns:
+            None.
+    """
+
+    # Create a mock Session object
+    session_mock = SessionMock()
+
+    # Call truncate_tables and pass the mock Session object
+    session_in_transaction = add_hashtags(
+        hashtags=NEW_HASHTAGS,
+        session=session_mock
+    )
+
+    assert session_in_transaction is False
 
     return None
 
@@ -314,10 +363,14 @@ def test_add_hashtags() -> None:
 def test_get_tweets() -> None:
     """ """
 
+    get_tweets()
+
     return None
 
 
 def test_add_tweets() -> None:
     """ """
+
+    add_tweets()
 
     return None
