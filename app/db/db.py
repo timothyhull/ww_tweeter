@@ -205,10 +205,48 @@ def add_hashtags(
     return session_active
 
 
-def get_tweets() -> None:
-    """ """
+def get_tweets(
+    search_tag: str = None,
+    session: sqlalchemy.orm.Session = session
+) -> None:
+    """ Get all hashtags from the database.
 
-    return None
+        Args:
+            search_tag (str, optional):
+                Hashtag search string for query filter.  Default value
+                is None, and will return all results.
+
+            session (sqlalchemy.orm.Session, optional):
+                By default, uses the session object created by the
+                _create_session function.  Allows the ability to pass a
+                mock Session object for pytest testing.
+
+        Returns:
+            tweets (List):
+                All entries in the tweets table.
+    """
+
+
+    # Get tweets from the database
+    tweets = session.query(TweetData)
+
+    # Attemt to filter tweet results
+    if search_tag is not None:
+        valid_hashtag = VALID_HASHTAG.match(
+            string=search_tag.lower()
+        )
+
+        # Check the validity of the hashtag
+        if valid_hashtag is not None:
+            filter = search_tag.lower()
+
+            # Apply a filter to the tweet data
+            tweets = tweets.filter(TweetData.tweet_text.ilike(filter))
+
+    # Return all tweets from the query
+    tweets = tweets.all()
+
+    return tweets
 
 
 def add_tweets() -> None:
