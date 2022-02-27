@@ -6,6 +6,7 @@ from typing import Callable, List
 from unittest.mock import MagicMock, patch
 
 # Imports - Third-Party
+from pytest import fixture
 import sqlalchemy
 
 # Imports - Local
@@ -208,13 +209,35 @@ class SessionMock(QueryMock):
         return query_mock
 
 
+# pytest fixtures
+@fixture
+def session_mock() -> SessionMock:
+    """ A pytest fixture to create a SessionMock object.
+
+        Mocks the sqlalchemy.orm.Session object.
+
+        Args:
+            None.
+
+        Returns:
+            mock_session (SessionMock):
+                Mock of an sqlalchemy.orm.Session object.
+    """
+
+    # Create a mock Session object
+    mock_session = SessionMock()
+
+    return mock_session
+
+
 # Test functions
 @patch.object(
     target=sqlalchemy.orm,
     attribute='Session'
 )
 def test_commit_session(
-    mock_session: MagicMock
+    mock_session: MagicMock,
+    session_mock: SessionMock
 ) -> None:
     """ Test the commit_session function.
 
@@ -222,12 +245,12 @@ def test_commit_session(
             mock_session (unittest.mock.MagicMock):
                 unittest MagicMock object.
 
+            session_mock (SessionMock):
+                Mock sqlalchemy.orm.Session object.
+
         Returns:
             None.
     """
-
-    # Create a mock Session object
-    session_mock = SessionMock()
 
     # Call commit_session and pass the mock Session object
     session_in_transaction = commit_session(
@@ -244,20 +267,21 @@ def test_commit_session(
     attribute='Session'
 )
 def test_create_session(
-    mock_session: MagicMock
+    mock_session: MagicMock,
+    session_mock: SessionMock
 ) -> None:
-    """ Test the _create_session function.
+    """ Test the commit_session function.
 
         Args:
             mock_session (unittest.mock.MagicMock):
                 unittest MagicMock object.
 
+            session_mock (SessionMock):
+                Mock sqlalchemy.orm.Session object.
+
         Returns:
             None.
     """
-
-    # Create a mock Session object
-    session_mock = SessionMock()
 
     assert session_mock.get_bind().name == DB_TEST_SESSION_NAME
     assert session_mock.get_bind().url.render_as_string() == \
@@ -271,7 +295,8 @@ def test_create_session(
     attribute='Session'
 )
 def test_truncate_tables(
-    mock_session: MagicMock
+    mock_session: MagicMock,
+    session_mock: SessionMock
 ) -> None:
     """ Test the truncate_tables function.
 
@@ -284,12 +309,12 @@ def test_truncate_tables(
             mock_session (unittest.mock.MagicMock):
                 unittest MagicMock object.
 
+            session_mock (SessionMock):
+                Mock sqlalchemy.orm.Session object.
+
         Returns:
             None.
     """
-
-    # Create a mock Session object
-    session_mock = SessionMock()
 
     # Call truncate_tables and pass the mock Session object
     session_in_transaction = truncate_tables(
@@ -306,7 +331,8 @@ def test_truncate_tables(
     attribute='Session'
 )
 def test_get_hashtags(
-    mock_session: MagicMock
+    mock_session: MagicMock,
+    session_mock: SessionMock
 ) -> None:
     """ Test the get_hashtags function.
 
@@ -314,12 +340,14 @@ def test_get_hashtags(
             mock_session (unittest.mock.MagicMock):
                 unittest MagicMock object.
 
+            session_mock (SessionMock):
+                Mock sqlalchemy.orm.Session object.
+
         Returns:
             None.
     """
 
-    session_mock = SessionMock()
-
+    # Call get_hashtags and pass the mock session object
     hashtags = get_hashtags(
         session=session_mock
     )
@@ -334,22 +362,23 @@ def test_get_hashtags(
     attribute='Session'
 )
 def test_add_hashtags(
-    mock_session: MagicMock
+    mock_session: MagicMock,
+    session_mock: SessionMock
 ) -> None:
-    """ Test the add_hashtags function.
+    """ Test the get_hashtags function.
 
         Args:
             mock_session (unittest.mock.MagicMock):
                 unittest MagicMock object.
 
+            session_mock (SessionMock):
+                Mock sqlalchemy.orm.Session object.
+
         Returns:
             None.
     """
 
-    # Create a mock Session object
-    session_mock = SessionMock()
-
-    # Call truncate_tables and pass the mock Session object
+    # Call add_hashtags and pass the mock Session object
     session_in_transaction = add_hashtags(
         hashtags=NEW_HASHTAGS,
         session=session_mock
