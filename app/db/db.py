@@ -226,7 +226,6 @@ def get_tweets(
                 All entries in the tweets table.
     """
 
-
     # Get tweets from the database
     tweets = session.query(TweetData)
 
