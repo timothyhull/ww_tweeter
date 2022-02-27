@@ -18,7 +18,7 @@ from app.db.db import (
 # Constants
 DB_TEST_SESSION_NAME = 'postgresql'
 DB_TEST_SESSION_BINDING = 'postgresql://root:***@db:5432/ww_tweeter_test'
-GET_HASHTAGS_RESPONSE = [1, 'hashtag_1', 10]
+GET_DB_DATA_RESPONSE = [1, 'test_data', 10]
 NEW_HASHTAGS = {
     'hashtag_1': 10,
     'hashtag_2': 20,
@@ -47,7 +47,7 @@ class OrderByMock:
         """ Class initialization method. """
 
         # Set an instance variable based on the query_result argument
-        self.query_result = GET_HASHTAGS_RESPONSE
+        self.query_result = GET_DB_DATA_RESPONSE
 
         return None
 
@@ -352,7 +352,7 @@ def test_get_hashtags(
         session=session_mock
     )
 
-    assert hashtags == GET_HASHTAGS_RESPONSE
+    assert hashtags == GET_DB_DATA_RESPONSE
 
     return None
 
@@ -389,10 +389,33 @@ def test_add_hashtags(
     return None
 
 
-def test_get_tweets() -> None:
-    """ """
+@patch.object(
+    target=sqlalchemy.orm,
+    attribute='Session'
+)
+def test_get_tweets(
+    mock_session: MagicMock,
+    session_mock: SessionMock
+) -> None:
+    """ Test the get_tweets function.
 
-    get_tweets()
+        Args:
+            mock_session (unittest.mock.MagicMock):
+                unittest MagicMock object.
+
+            session_mock (SessionMock):
+                Mock sqlalchemy.orm.Session object.
+
+        Returns:
+            None.
+    """
+
+    # Call add_hashtags and pass the mock Session object
+    tweets = get_tweets(
+        session=session_mock
+    )
+
+    assert tweets == GET_DB_DATA_RESPONSE
 
     return None
 
