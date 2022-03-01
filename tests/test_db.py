@@ -2,6 +2,7 @@
 """ Tests for db/db.py. """
 
 # Imports - Python Standard Library
+from collections import namedtuple
 from typing import Callable, List
 from unittest.mock import MagicMock, patch
 
@@ -15,6 +16,18 @@ from app.db.db import (
     add_hashtags, get_tweets, add_tweets
 )
 
+# namedtuple objects
+NewTweet = namedtuple(
+    typename='NewTweet',
+    field_names=[
+        'tweet_id',
+        'tweet_text',
+        'created',
+        'likes',
+        'retweets'
+    ]
+)
+
 # Constants
 DB_TEST_SESSION_NAME = 'postgresql'
 DB_TEST_SESSION_BINDING = 'postgresql://root:***@db:5432/ww_tweeter_test'
@@ -25,6 +38,15 @@ NEW_HASHTAGS = {
     'hashtag_3': 30,
 }
 GET_TWEETS_SEARCH_STRING = 'Hashtag'
+NEW_TWEETS = [
+    NewTweet(
+        tweet_id='Tweet #1',
+        tweet_text='This is a tweet #1',
+        created='2022-03-01 22:25:28.357434',
+        likes=10,
+        retweets=20
+    )
+]
 
 
 # Test classes
@@ -454,9 +476,33 @@ def test_get_tweets(
     return None
 
 
-def test_add_tweets() -> None:
-    """ """
+@patch.object(
+    target=sqlalchemy.orm,
+    attribute='Session'
+)
+def test_add_tweets(
+    mock_session: MagicMock,
+    session_mock: SessionMock
+) -> None:
+    """ Test the add_tweets function.
 
-    add_tweets()
+        Args:
+            mock_session (unittest.mock.MagicMock):
+                unittest MagicMock object.
+
+            session_mock (SessionMock):
+                Mock sqlalchemy.orm.Session object.
+
+        Returns:
+            None.
+    """
+
+    # Call add_tweets and pass the mock Session object
+    session_in_transaction = add_tweets(
+        tweets=NEW_TWEETS,
+        session=session_mock
+    )
+
+    assert session_in_transaction is False
 
     return None
