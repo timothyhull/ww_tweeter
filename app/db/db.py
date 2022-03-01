@@ -208,7 +208,7 @@ def add_hashtags(
 def get_tweets(
     search_tag: str = None,
     session: sqlalchemy.orm.Session = session
-) -> None:
+) -> List:
     """ Get all hashtags from the database.
 
         Args:
@@ -248,7 +248,32 @@ def get_tweets(
     return tweets
 
 
-def add_tweets() -> None:
-    """ """
+def add_tweets(
+    tweets: Dict,
+    session: sqlalchemy.orm.Session = session
+) -> bool:
+    """ Add hashtags to the database.
 
-    return None
+        Args:
+            tweets (Dict):
+                Dictionary object with new tweets.
+
+        session (sqlalchemy.orm.Session, optional):
+            By default, uses the session object created by the
+            _create_session function.  Allows the ability to pass a
+            mock Session object for pytest testing.
+
+        Returns:
+           session_active (bool):
+                False if the transaction is complete, True if the
+                transaction is neither committed nor rolled back.
+    """
+
+    print(tweets)
+
+    # Commit the changes to the database
+    session_active = commit_session(
+        session=session
+    )
+
+    return session_active
