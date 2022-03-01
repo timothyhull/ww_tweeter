@@ -98,9 +98,34 @@ class QueryMock:
         """
 
         # Create a mock ordered list of query results
-        ordered_query = OrderByMock(query_result=criterion)
+        ordered_query = OrderByMock(
+            query_result=criterion
+        )
 
         return ordered_query
+
+    def filter(
+        self,
+        criterion
+    ) -> List:
+        """ Mock of the filter method.
+
+            Args:
+                criterion:
+                    Mock criterion to order results by, in the form of
+                    a database class attribute (Hashtag.name.asc()).
+
+            Returns:
+                filtered_query (List):
+                    Mock filtered list of query results.
+        """
+
+        # Create a mock ordered list of query results
+        filtered_query = OrderByMock(
+            query_result=criterion
+        )
+
+        return filtered_query
 
 
 # Define a SessionMock class for the test methods
