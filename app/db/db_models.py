@@ -88,7 +88,9 @@ class TweetData(BASE):
         """
 
         repr_string = (
-            f'<Tweet(tweet_id={self.tweet_id}), tweet_text={self.tweet_text}>'
+            f'<Tweet(id={self.id}), tweet_id={self.tweet_id}, '
+            f'text={self.tweet_text}), tweet_created={self.created}, '
+            f'likes={self.likes}, retweets={self.retweets})>'
         )
 
         return repr_string
