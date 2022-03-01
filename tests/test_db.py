@@ -24,6 +24,7 @@ NEW_HASHTAGS = {
     'hashtag_2': 20,
     'hashtag_3': 30,
 }
+GET_TWEETS_SEARCH_STRING = 'Hashtag'
 
 
 # Test classes
@@ -36,15 +37,26 @@ class SessionBindURLMock:
         return str(url_as_string)
 
 
-# Define an OrderByMock class for the test methods
-class OrderByMock:
-    """ Mock of the Session.query.orderby method response object. """
+# Define a QueryMock class for the SessionMock.query method response object
+class QueryMock:
+    """ Mock of the Session.query method response object. """
 
     def __init__(
         self,
-        query_result: List
-    ) -> List:
-        """ Class initialization method. """
+        instance: str
+    ) -> None:
+        """ Class initialization method.
+
+            Args:
+                instance (str):
+                    Placeholder/mock for database table class.
+
+            Returns:
+                None.
+        """
+
+        # Set an instance variable based on the database table name
+        self.instance = instance
 
         # Set an instance variable based on the query_result argument
         self.query_result = GET_DB_DATA_RESPONSE
@@ -64,11 +76,6 @@ class OrderByMock:
 
         return self.query_result
 
-
-# Define a QueryMock class for the SessionMock.query method response object
-class QueryMock:
-    """ Mock of the Session.query method response object. """
-
     def delete(self) -> str:
         """ Mock of the delete method.
 
@@ -80,6 +87,29 @@ class QueryMock:
         """
 
         return None
+
+    def filter(
+        self,
+        criterion
+    ) -> List:
+        """ Mock of the filter method.
+
+            Args:
+                criterion:
+                    Mock criterion to filter results by, in the form of
+                    a database class attribute:
+                        (filter(TweetData.tweet_text.ilike(filter)).
+
+            Returns:
+                filtered_query (List):
+                    Mock filtered list of query results.
+        """
+
+        # Create a mock ordered list of query results
+        filtered_query = QueryMock(
+            instance=self.instance)
+
+        return filtered_query
 
     def order_by(
         self,
@@ -98,34 +128,10 @@ class QueryMock:
         """
 
         # Create a mock ordered list of query results
-        ordered_query = OrderByMock(
-            query_result=criterion
-        )
+        ordered_query = QueryMock(
+            instance=self.instance)
 
         return ordered_query
-
-    def filter(
-        self,
-        criterion
-    ) -> List:
-        """ Mock of the filter method.
-
-            Args:
-                criterion:
-                    Mock criterion to order results by, in the form of
-                    a database class attribute (Hashtag.name.asc()).
-
-            Returns:
-                filtered_query (List):
-                    Mock filtered list of query results.
-        """
-
-        # Create a mock ordered list of query results
-        filtered_query = OrderByMock(
-            query_result=criterion
-        )
-
-        return filtered_query
 
 
 # Define a SessionMock class for the test methods
@@ -226,7 +232,9 @@ class SessionMock(QueryMock):
         """
 
         # Create an instance of QueryMock
-        query_mock = QueryMock()
+        query_mock = QueryMock(
+            instance=instance
+        )
 
         # Append the return value to self.transactions
         self.transactions.append(query_mock)
@@ -437,6 +445,7 @@ def test_get_tweets(
 
     # Call add_hashtags and pass the mock Session object
     tweets = get_tweets(
+        search_tag=GET_TWEETS_SEARCH_STRING,
         session=session_mock
     )
 
