@@ -44,7 +44,7 @@ NEW_TWEETS = [
         text='This is a tweet #1',
         created_at='2022-03-01 22:25:28.357434',
         favorite_count=10,
-        retweets_count=20
+        retweet_count=20
     )
 ]
 
