@@ -20,11 +20,11 @@ from app.db.db import (
 NewTweet = namedtuple(
     typename='NewTweet',
     field_names=[
-        'tweet_id',
-        'tweet_text',
-        'created',
-        'likes',
-        'retweets'
+        'id',
+        'text',
+        'created_at',
+        'favorite_count',
+        'retweet_count'
     ]
 )
 
@@ -40,11 +40,11 @@ NEW_HASHTAGS = {
 GET_TWEETS_SEARCH_STRING = 'Hashtag'
 NEW_TWEETS = [
     NewTweet(
-        tweet_id='Tweet #1',
-        tweet_text='This is a tweet #1',
-        created='2022-03-01 22:25:28.357434',
-        likes=10,
-        retweets=20
+        id='Tweet #1',
+        text='This is a tweet #1',
+        created_at='2022-03-01 22:25:28.357434',
+        favorite_count=10,
+        retweets_count=20
     )
 ]
 
