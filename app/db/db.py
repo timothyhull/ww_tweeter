@@ -283,7 +283,7 @@ def add_tweets(
     for tweet in tweets:
         session.add(
             instance=TweetData(
-                tweed_id=tweet.id,
+                tweet_id=tweet.id,
                 tweet_text=tweet.text,
                 created=tweet.created_at,
                 likes=tweet.favorite_count,
