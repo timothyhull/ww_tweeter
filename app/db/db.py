@@ -5,7 +5,7 @@
 from os import getenv
 import re
 from sys import argv
-from typing import Dict, List
+from typing import Dict, List, Union
 
 # Imports - Third-Party
 from sqlalchemy import create_engine
@@ -249,7 +249,7 @@ def get_tweets(
 
 
 def add_tweets(
-    tweets: Dict,
+    tweets: Union[List, Dict],
     session: sqlalchemy.orm.Session = session
 ) -> bool:
     """ Add hashtags to the database.
@@ -269,7 +269,27 @@ def add_tweets(
                 transaction is neither committed nor rolled back.
     """
 
-    print(tweets)
+    # Determine the object type of tweets, and set/reset the value accordingly
+    if isinstance(tweets, list):
+        tweets = tweets
+    elif isinstance(tweets, dict):
+        tweets = tweets.items()
+    else:
+        raise ValueError(
+            '"tweets" must be of type "list" or "dict"'
+        )
+
+    # Add new tweets to the session object
+    for tweet in tweets:
+        session.add(
+            instance=TweetData(
+                tweed_id=tweet.id,
+                tweet_text=tweet.text,
+                created=tweet.created_at,
+                likes=tweet.favorite_count,
+                retweets=tweet.retweet_count
+            )
+        )
 
     # Commit the changes to the database
     session_active = commit_session(
