@@ -11,7 +11,7 @@ from tweepy.api import API
 import tweepy
 
 # Imports - Local
-from app.tweeter import (
+from app.tweeter.tweeter import (
     twitter_api_auth, get_tweets, TWEET_SLICE
 )
 
