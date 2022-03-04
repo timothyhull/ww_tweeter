@@ -12,7 +12,7 @@ import tweepy
 
 # Imports - Local
 from app.tweeter.tweeter import (
-    twitter_api_auth, get_tweets, TWEET_SLICE
+    twitter_api_auth, get_top_n_tweets, TWEET_SLICE
 )
 
 
@@ -159,7 +159,7 @@ def test_twitter_auth() -> None:
     attribute='Cursor',
     return_value=CURSOR_MOCK
 )
-def test_get_tweets(
+def test_get_top_n_tweets(
     cursor: MagicMock
 ) -> None:
     """ Test the get_tweets function.
@@ -173,7 +173,7 @@ def test_get_tweets(
     """
 
     # Call the get_tweets function
-    tweets = get_tweets(
+    tweets = get_top_n_tweets(
         api_object=TWEEPY_API_MOCK
     )
 
