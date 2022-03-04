@@ -27,7 +27,7 @@ AUTO_FLUSH = True
 DB_LOGGING = True
 DB_URL = getenv(key='DB_URL', default=None)
 DB_TEST_URL = getenv(key='DB_TEST_URL', default=None)
-VALID_HASHTAG = re.compile(r'^[a-z0-9]+$')
+VALID_HASHTAG = re.compile(r'#([a-z0-9]{3,})')
 
 
 # Classes
