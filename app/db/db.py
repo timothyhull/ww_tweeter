@@ -5,7 +5,7 @@
 from os import getenv
 import re
 from sys import argv
-from typing import Dict, List, Union
+from typing import Dict, List, Tuple, Union
 
 # Imports - Third-Party
 from sqlalchemy import create_engine
@@ -249,13 +249,13 @@ def get_tweets(
 
 
 def add_tweets(
-    tweets: Union[List, Dict],
+    tweets: Union[Dict, List, Tuple],
     session: sqlalchemy.orm.Session = session
 ) -> bool:
     """ Add hashtags to the database.
 
         Args:
-            tweets (Dict):
+            tweets (Dict, List, or Tuple):
                 Dictionary object with new tweets.
 
         session (sqlalchemy.orm.Session, optional):
@@ -270,7 +270,7 @@ def add_tweets(
     """
 
     # Determine the object type of tweets, and set/reset the value accordingly
-    if isinstance(tweets, list):
+    if isinstance(tweets, list) or isinstance(tweets, tuple):
         tweets = tweets
     elif isinstance(tweets, dict):
         tweets = tweets.items()
