@@ -13,6 +13,9 @@ import dotenv
 import tweepy
 
 # Imports - Local
+from app.db.db import (
+    add_tweets, truncate_tables
+)
 
 # namedtuple objects
 Tweet = namedtuple(
@@ -71,7 +74,7 @@ def twitter_api_auth() -> API:
     return api
 
 
-def get_tweets(
+def get_top_n_tweets(
     api_object: API
 ) -> Cursor:
     """ Collect tweets using tweepy.Cursor.
@@ -109,14 +112,21 @@ def main() -> None:
             None.
     """
 
+    # Clear the database tables
+    truncate_tables()
+
     # Create a twitter API authentication object
     api = twitter_api_auth()
 
     # Collet tweets from the Twitter API
-    tweets = get_tweets(
+    tweets = get_top_n_tweets(
         api_object=api
     )
-    print(tweets)
+
+    # Add tweets to the database
+    add_tweets(
+        tweets=list(tweets)
+    )
 
     return None
 
