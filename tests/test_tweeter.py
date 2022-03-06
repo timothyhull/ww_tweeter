@@ -12,7 +12,7 @@ import tweepy
 
 # Imports - Local
 from app.tweeter.tweeter import (
-    twitter_api_auth, get_top_n_tweets, TWEET_SLICE
+    twitter_api_auth, get_top_n_tweets, hashtag_counter, TWEET_SLICE
 )
 
 
@@ -55,6 +55,7 @@ class Status:
         # Create attributes that match the mocked Status object
         self._api = mock_api,
         self._json = mock_tweets
+        self.text = self._json.get('text')
 
         return None
 
@@ -109,7 +110,7 @@ TWEEPY_API_MOCK = TweepyAPIMock()
 TWEET_MOCK = {
     'created_at': 'Thu Jan 20 19:35:26 +0000 2022',
     'id': 1484248219051827202,
-    'text': '1 in 3 customers will leave a brand they love after...',
+    'text': '1 in 3 customers will leave a #brand they love after...',
     'user': {
         'id': 370255074,
         'id_str': '370255074',
@@ -185,5 +186,26 @@ def test_get_top_n_tweets(
 
     # Assert the mocked tweet's text matches the expected value
     assert tweet_mock.get('text') == TWEET_MOCK.get('text')
+
+    return None
+
+
+def test_hashtag_counter() -> None:
+    """ Test the get_tweets function.
+
+        Args:
+            None.
+
+        Returns:
+            None.
+    """
+
+    # Call the hashtag_counter function
+    hashtag_count = hashtag_counter(
+        tweets=CURSOR_STATUS_MOCK.text
+    )
+
+    # Look for the count of the hashtag #brand
+    assert hashtag_count[0][1] == 1
 
     return None
