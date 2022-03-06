@@ -2,9 +2,10 @@
 """ Twitter analyzer for #100DaysofCode Days 59+60. """
 
 # Imports - Python Standard Library
+from collections import Counter, namedtuple
 from itertools import islice
 from os import getenv
-from collections import namedtuple
+from typing import Iterable, List
 
 # Imports - Third-Party
 from tweepy.api import API
@@ -14,7 +15,7 @@ import tweepy
 
 # Imports - Local
 from app.db.db import (
-    add_tweets, truncate_tables
+    VALID_HASHTAG, add_tweets, truncate_tables
 )
 
 # namedtuple objects
@@ -102,6 +103,32 @@ def get_top_n_tweets(
     return tweets
 
 
+def hashtag_counter(
+    tweets: Iterable
+) -> List:
+    """ Counts and sorts hashtags in a list of tweets.
+
+        Args:
+            tweets (Iterable):
+                Iterable object with tweets.
+
+        Returns:
+            hashtag_count (List):
+                Counter object of hashtags converted to a list when
+                sorted using the Counter.most_common method.
+    """
+
+    # Create a space-separated sting of all words in all tweets
+    tweet_text = ' '.join(tweet.text.lower() for tweet in tweets)
+
+    # Create a sorted Counter object of hashtags from tweet_text
+    hashtag_count = Counter(
+        VALID_HASHTAG.findall(tweet_text)
+    ).most_common()
+
+    return hashtag_count
+
+
 def main() -> None:
     """ Main program.
 
@@ -123,9 +150,12 @@ def main() -> None:
         api_object=api
     )
 
+    # Convert tweets to from an islice to a list
+    tweets = list(tweets)
+
     # Add tweets to the database
     add_tweets(
-        tweets=list(tweets)
+        tweets=tweets
     )
 
     return None
