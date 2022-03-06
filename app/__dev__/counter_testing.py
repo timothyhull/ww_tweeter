@@ -24,4 +24,4 @@ tweets = get_top_n_tweets(auth)
 tweet_text = ' '.join(tweet.text.lower() for tweet in tweets)
 
 # Create a Counter object for hashtags
-hashtag_counter = Counter(VALID_HASHTAG.findall(tweet_text))
+hashtag_counter = Counter(VALID_HASHTAG.findall(tweet_text)).most_common()
