@@ -30,7 +30,7 @@ class Hashtag(BASE):
         type_=Integer,
         primary_key=True
     )
-    name = Column(String(20))
+    name = Column(String(40))
     count = Column(Integer)
 
     # Create repr function
