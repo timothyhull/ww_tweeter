@@ -55,7 +55,7 @@ class Status:
         # Create attributes that match the mocked Status object
         self._api = mock_api,
         self._json = mock_tweets
-        self.text = self._json.get('text')
+        self.text = self._json[0].get('text')
 
         return None
 
@@ -107,20 +107,22 @@ class CursorMock:
 # Constants
 TWEEPY_API_MOCK = TweepyAPIMock()
 
-TWEET_MOCK = {
-    'created_at': 'Thu Jan 20 19:35:26 +0000 2022',
-    'id': 1484248219051827202,
-    'text': '1 in 3 customers will leave a #brand they love after...',
-    'user': {
-        'id': 370255074,
-        'id_str': '370255074',
-        'name': 'World Wide Technology',
-        'screen_name': 'wwt_inc',
-        'location': 'Global',
-        'description': 'Combining strategy and execution to help...',
-        'url': 'https://t.co/KYeroT8Oj6'
+TWEET_MOCK = [
+    {
+        'created_at': 'Thu Jan 20 19:35:26 +0000 2022',
+        'id': 1484248219051827202,
+        'text': '1 in 3 customers will leave a #brand they love after...',
+        'user': {
+            'id': 370255074,
+            'id_str': '370255074',
+            'name': 'World Wide Technology',
+            'screen_name': 'wwt_inc',
+            'location': 'Global',
+            'description': 'Combining strategy and execution to help...',
+            'url': 'https://t.co/KYeroT8Oj6'
+        }
     }
-}
+]
 
 CURSOR_STATUS_MOCK = Status(
     mock_api=API,
@@ -185,7 +187,7 @@ def test_get_top_n_tweets(
     assert len(list(tweet_mock)) <= TWEET_SLICE
 
     # Assert the mocked tweet's text matches the expected value
-    assert tweet_mock.get('text') == TWEET_MOCK.get('text')
+    assert tweet_mock[0].get('text') == TWEET_MOCK[0].get('text')
 
     return None
 
@@ -202,8 +204,10 @@ def test_hashtag_counter() -> None:
 
     # Call the hashtag_counter function
     hashtag_count = hashtag_counter(
-        tweets=CURSOR_STATUS_MOCK.text
+        tweets=CURSOR_MOCK.items()
     )
+
+    print(hashtag_count)
 
     # Look for the count of the hashtag #brand
     assert hashtag_count[0][1] == 1
