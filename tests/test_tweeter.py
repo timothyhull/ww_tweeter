@@ -3,7 +3,7 @@
 
 # Imports - Python Standard Library
 from types import GeneratorType
-from typing import Dict
+from typing import List
 from unittest.mock import MagicMock, patch
 
 # Imports - Third-Party
@@ -33,7 +33,7 @@ class Status:
     def __init__(
         self,
         mock_api: API,
-        mock_tweets: Dict
+        mock_tweets: List
     ) -> None:
         """ Populate the Status object with mocked attributes.
 
@@ -43,10 +43,11 @@ class Status:
                     Pass a tweepy.api.API object to this argument in
                     the format "Status(mock_api=API)".
 
-                mock_tweets (Dict):
-                    Pass a dictionary with one or more mocked tweets.
-                    For this test, pass the value TWEET_MOCK in the
-                    format "Status(mock_api=API, mock_json=TWEET_MOCK".
+                mock_tweets (List):
+                    Pass a list of dictionaries with one or more mocked
+                    tweets.  For this test, pass the value TWEET_MOCK
+                    in the format:
+                        "Status(mock_api=API, mock_json=TWEET_MOCK".
 
             Returns:
                 None.
@@ -206,8 +207,6 @@ def test_hashtag_counter() -> None:
     hashtag_count = hashtag_counter(
         tweets=CURSOR_MOCK.items()
     )
-
-    print(hashtag_count)
 
     # Look for the count of the hashtag #brand
     assert hashtag_count[0][1] == 1
