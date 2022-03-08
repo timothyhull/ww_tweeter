@@ -5,7 +5,7 @@
 from collections import Counter, namedtuple
 from itertools import islice
 from os import getenv
-from typing import Iterable, List
+from typing import Dict, Iterable
 
 # Imports - Third-Party
 from tweepy.api import API
@@ -15,7 +15,7 @@ import tweepy
 
 # Imports - Local
 from app.db.db import (
-    VALID_HASHTAG, add_tweets, truncate_tables
+    add_tweets, add_hashtags, truncate_tables, VALID_HASHTAG
 )
 
 # namedtuple objects
@@ -105,7 +105,7 @@ def get_top_n_tweets(
 
 def hashtag_counter(
     tweets: Iterable
-) -> List:
+) -> Dict:
     """ Counts and sorts hashtags in a list of tweets.
 
         Args:
@@ -113,9 +113,10 @@ def hashtag_counter(
                 Iterable object with tweets.
 
         Returns:
-            hashtag_count (List):
+            hashtag_count (Dict):
                 Counter object of hashtags converted to a list when
-                sorted using the Counter.most_common method.
+                sorted using the Counter.most_common method. Converted
+                to a Dict before returning.
     """
 
     # Create a space-separated sting of all words in all tweets
@@ -126,7 +127,33 @@ def hashtag_counter(
         VALID_HASHTAG.findall(tweet_text)
     ).most_common()
 
+    # Convert hashtag_count to a dictionary
+    hashtag_count = dict(hashtag_count)
+
     return hashtag_count
+
+
+def import_hashtags(
+    hashtag_count: Dict
+) -> bool:
+    """ Counts and sorts hashtags in a list of tweets.
+
+        Args:
+            hashtag_count (Dict):
+                Dictionary of hashtags as keys, and counts as values.
+
+        Returns:
+            session_active (bool):
+                False if the transaction is complete, True if the
+                transaction is neither committed nor rolled back.
+    """
+
+    # Call the add_hashtags function
+    session_active = add_hashtags(
+        hashtags=hashtag_count
+    )
+
+    return session_active
 
 
 def main() -> None:
@@ -156,6 +183,16 @@ def main() -> None:
     # Add tweets to the database
     add_tweets(
         tweets=tweets
+    )
+
+    # Collect a count of hashtags
+    hashtag_count = hashtag_counter(
+        tweets=tweets
+    )
+
+    # Add hashtags to the database
+    import_hashtags(
+        hashtag_count=hashtag_count
     )
 
     return None
