@@ -12,8 +12,7 @@ import tweepy
 
 # Imports - Local
 from app.tweeter.tweeter import (
-    twitter_api_auth, get_top_n_tweets, hashtag_counter,  # import_hashtags,
-    TWEET_SLICE
+    twitter_api_auth, get_top_n_tweets, hashtag_counter, TWEET_SLICE
 )
 
 
@@ -212,18 +211,5 @@ def test_hashtag_counter() -> None:
     # Look for the count of the hashtag #brand
     # Converts {'brand': 1}.values() to a list, to extract the value (index 0)
     assert list(hashtag_count.values())[0] == 1
-
-    return None
-
-
-def test_import_hashtags() -> None:
-    """ Test the import_hashtags function.
-
-        Args:
-            None.
-
-        Returns:
-            None.
-    """
 
     return None
