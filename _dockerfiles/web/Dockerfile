@@ -1,0 +1,23 @@
+# Dockerfile for bottle web application
+FROM python:3.10-slim-buster
+
+# Set the working directory
+WORKDIR /workspaces/ww-tweeter
+
+# Expose the web service port
+EXPOSE 8080/tcp
+
+# Update OS packages
+RUN apt-get update && \
+    apt-get upgrade -y
+
+# Upgrade pip and install requirements from the requirements file
+RUN python -m pip install --upgrade pip && \
+    python -m pip install -r requirements/requirements.txt && \
+    rm -rf requirements
+
+# Set the PYTHONPATH environment variable
+ENV PYTHONPATH=/workspaces/ww-tweeter
+
+# Start the bottle server
+CMD ["python", "app/__dev__/bottle_testing.py"]
