@@ -2,7 +2,7 @@
 """ Twitter analyzer for #100DaysofCode Days 59+60. """
 
 # Imports - Python Standard Library
-from collections import Counter, namedtuple
+from collections import Counter
 from itertools import islice
 from os import getenv
 from typing import Dict, Iterable
@@ -16,18 +16,6 @@ import tweepy
 # Imports - Local
 from app.db.db import (
     add_tweets, add_hashtags, truncate_tables, VALID_HASHTAG
-)
-
-# namedtuple objects
-Tweet = namedtuple(
-    typename='Tweet',
-    field_names=[
-        'id',
-        'text',
-        'created',
-        'likes',
-        'retweets'
-    ]
 )
 
 # Load environment variables
