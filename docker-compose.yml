@@ -46,7 +46,7 @@ services:
       # - ./_dockerfiles/db/db_init:/docker-entrypoint-initdb.d/
       - db:/var/lib/postgresql/data
 
-  # Application
+  # Python application
   app:
     build:
       context: ./
@@ -59,6 +59,23 @@ services:
       ww-tweeter:
         aliases:
           - app
+    volumes:
+      - ./app:/workspaces/ww-tweeter/app
+      - ./tests:/workspaces/ww-tweeter/tests
+      - ./pytest.ini:/workspaces/ww-tweeter/pytest.ini
+
+  # Bottle web application
+  web:
+    build:
+      context: ./_dockerfiles/web
+    depends_on:
+      - db_admin
+      - db
+      - app
+    networks:
+      ww-tweeter:
+        aliases:
+          - web
     volumes:
       - ./app:/workspaces/ww-tweeter/app
       - ./tests:/workspaces/ww-tweeter/tests
