@@ -28,7 +28,7 @@ TWITTER_SECRET = getenv('TWITTER_SECRET')
 TWITTER_ACCESS_TOKEN = getenv('TWITTER_ACCESS_TOKEN')
 TWITTER_ACCESS_SECRET = getenv('TWITTER_ACCESS_SECRET')
 TWITTER_TIMEOUT = 5
-TWEET_SLICE = 100
+TWEET_SLICE = None  # Sets the limit of tweets, set to None for no limit
 
 
 def twitter_api_auth() -> API:
@@ -85,8 +85,9 @@ def get_top_n_tweets(
         include_rts=True
     ).items()
 
-    # Return a slice of the tweets generator object
-    tweets = islice(tweets, TWEET_SLICE)
+    # If TWEET slice is set, return only a slice of the tweets generator object
+    if TWEET_SLICE is not None:
+        tweets = islice(tweets, TWEET_SLICE)
 
     return tweets
 
