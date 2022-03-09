@@ -2,7 +2,7 @@
 FROM postgres:14.1-bullseye
 
 # Expose the PostgreSQL DB port
-EXPOSE 5432/TCP
+EXPOSE 5432/tcp
 
 # Set the working directory
 # WORKDIR /db
