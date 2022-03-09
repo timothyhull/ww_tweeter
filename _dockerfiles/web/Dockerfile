@@ -11,6 +11,9 @@ EXPOSE 8080/tcp
 RUN apt-get update && \
     apt-get upgrade -y
 
+# Copy the pip requirements file
+COPY requirements/requirements.txt requirements/requirements.txt
+
 # Upgrade pip and install requirements from the requirements file
 RUN python -m pip install --upgrade pip && \
     python -m pip install -r requirements/requirements.txt && \
