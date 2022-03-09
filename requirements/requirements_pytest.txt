@@ -10,3 +10,6 @@ sqlalchemy
 
 # Twitter
 tweepy
+
+# Web service
+bottle
