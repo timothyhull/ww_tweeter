@@ -26,7 +26,7 @@ TWITTER_SECRET = getenv('TWITTER_SECRET')
 TWITTER_ACCESS_TOKEN = getenv('TWITTER_ACCESS_TOKEN')
 TWITTER_ACCESS_SECRET = getenv('TWITTER_ACCESS_SECRET')
 TWITTER_TIMEOUT = 5
-TWEET_SLICE = None  # Sets the limit of tweets, set to None for no limit
+TWEET_SLICE = 500  # Sets the limit of tweets, set to None for no limit
 
 
 def twitter_api_auth() -> API:
