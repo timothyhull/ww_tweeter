@@ -121,29 +121,6 @@ def hashtag_counter(
     return hashtag_count
 
 
-def import_hashtags(
-    hashtag_count: Dict
-) -> bool:
-    """ Counts and sorts hashtags in a list of tweets.
-
-        Args:
-            hashtag_count (Dict):
-                Dictionary of hashtags as keys, and counts as values.
-
-        Returns:
-            session_active (bool):
-                False if the transaction is complete, True if the
-                transaction is neither committed nor rolled back.
-    """
-
-    # Call the add_hashtags function
-    session_active = add_hashtags(
-        hashtags=hashtag_count
-    )
-
-    return session_active
-
-
 def main() -> None:
     """ Main program.
 
@@ -179,8 +156,8 @@ def main() -> None:
     )
 
     # Add hashtags to the database
-    import_hashtags(
-        hashtag_count=hashtag_count
+    add_hashtags(
+        hashtags=hashtag_count
     )
 
     return None
