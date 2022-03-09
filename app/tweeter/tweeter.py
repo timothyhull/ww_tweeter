@@ -14,9 +14,7 @@ import dotenv
 import tweepy
 
 # Imports - Local
-from app.db.db import (
-    add_tweets, add_hashtags, truncate_tables, VALID_HASHTAG
-)
+from app.db import db
 
 # Load environment variables
 dotenv.load_dotenv()
@@ -113,7 +111,7 @@ def hashtag_counter(
 
     # Create a sorted Counter object of hashtags from tweet_text
     hashtag_count = Counter(
-        VALID_HASHTAG.findall(tweet_text)
+        db.VALID_HASHTAG.findall(tweet_text)
     ).most_common()
 
     # Convert hashtag_count to a dictionary
@@ -133,7 +131,7 @@ def main() -> None:
     """
 
     # Clear the database tables
-    truncate_tables()
+    db.truncate_tables()
 
     # Create a twitter API authentication object
     api = twitter_api_auth()
@@ -147,7 +145,7 @@ def main() -> None:
     tweets = list(tweets)
 
     # Add tweets to the database
-    add_tweets(
+    db.add_tweets(
         tweets=tweets
     )
 
@@ -157,7 +155,7 @@ def main() -> None:
     )
 
     # Add hashtags to the database
-    add_hashtags(
+    db.add_hashtags(
         hashtags=hashtag_count
     )
 
