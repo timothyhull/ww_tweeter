@@ -12,7 +12,7 @@ import tweepy
 
 # Imports - Local
 from app.tweeter.tweeter import (
-    twitter_api_auth, get_top_n_tweets, hashtag_counter, TWEET_SLICE
+    twitter_api_auth, get_top_n_tweets, hashtag_counter
 )
 
 
@@ -183,9 +183,6 @@ def test_get_top_n_tweets(
 
     # Read the next iteration from the tweets generator object
     tweet_mock = next(tweets)._json
-
-    # Assert the number of tweets is <= TWEET_SLICE
-    assert len(list(tweet_mock)) <= TWEET_SLICE
 
     # Assert the mocked tweet's text matches the expected value
     assert tweet_mock[0].get('text') == TWEET_MOCK[0].get('text')
