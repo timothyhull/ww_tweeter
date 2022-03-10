@@ -1,0 +1,9 @@
+# Python interpreter
+ipython
+
+# Python testing
+pytest
+pytest-cov
+
+# Web service
+bottle
