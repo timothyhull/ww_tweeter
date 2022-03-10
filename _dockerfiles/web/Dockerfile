@@ -23,4 +23,4 @@ RUN python -m pip install --upgrade pip && \
 ENV PYTHONPATH=/workspaces/ww-tweeter
 
 # Start the bottle server
-CMD ["python", "app/__dev__/bottle_testing.py"]
+CMD ["python", "__dev__/bottle_testing.py"]
