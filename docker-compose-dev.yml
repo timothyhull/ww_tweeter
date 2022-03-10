@@ -14,7 +14,7 @@ services:
           - db_admin
           - db_admin_dev
     ports:
-      - 8080:80/TCP
+      - 8080:80/tcp
     volumes:
       - ./_dockerfiles/db_admin/pg_admin_dev:/var/lib/pgadmin
       - ./_dockerfiles/db_admin/pg_admin_dev:/pgadmin4/servers.json
@@ -39,7 +39,7 @@ services:
           - db
           - db_deb
     ports:
-      - 5432:5432/TCP
+      - 5432:5432/tcp
     volumes:
       # - ./_dockerfiles/db/db_init:/docker-entrypoint-initdb.d/
       - db_dev:/var/lib/postgresql/data
@@ -78,6 +78,8 @@ services:
         aliases:
           - web
           - web_dev
+    ports:
+      - 8081:8080/tcp
     volumes:
       - ./app:/workspaces/ww-tweeter/app
       - ./tests:/workspaces/ww-tweeter/tests
