@@ -44,7 +44,7 @@ def hello_world() -> str:
 # Call the run function to start the web service
 run(
     app=app,
-    host='0.0.0.0',
+    host='web',
     port=8080,
     debug=True
 )
