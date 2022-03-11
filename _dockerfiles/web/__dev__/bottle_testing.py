@@ -14,13 +14,16 @@
 # Imports - Python Standard Library
 
 # Imports - Third-Party
-from bottle import route, run
+from bottle import Bottle, run
 
 # Imports - Local
 
+# Create a route object
+app = Bottle()
+
 
 # Hello world test function
-@route('/')
+@app.route('/')
 def hello_world() -> str:
     """ Display a hello world string.
 
