@@ -18,7 +18,7 @@ from bottle import Bottle, run
 
 # Imports - Local
 
-# Create a route object
+# Create Bottle object
 app = Bottle()
 
 
@@ -43,6 +43,7 @@ def hello_world() -> str:
 
 # Call the run function to start the web service
 run(
+    app=app,
     host='0.0.0.0',
     port=8080,
     debug=True
