@@ -22,8 +22,15 @@ from bottle import Bottle, run
 app = Bottle()
 
 
-# Hello world test function
-@app.route('/')
+# Hello world test function that listens on two paths (/ and /hello)
+@app.route(
+    path='/',
+    method='GET'
+)
+@app.route(
+    path='/hello',
+    method='GET'
+)
 def hello_world() -> str:
     """ Display a hello world string.
 
@@ -37,6 +44,66 @@ def hello_world() -> str:
 
     # Set a string to display
     display_string = 'Hello World!'
+
+    return display_string
+
+
+# Dynamic route test function
+@app.route(
+    path='/hello/<name>',
+    method='GET'
+)
+@app.route(
+    path='/hello/<name>/',
+    method='GET'
+)
+def hello_name(
+    name: str
+) -> None:
+    """ Display a custom hello string.
+
+        Args:
+            name (str):
+                Name value to display.
+
+        Returns:
+            display_string (str):
+                String to display in a web browser.
+    """
+
+    # Set a string to display
+    display_string = f'Hello {name.title()}'
+
+    return display_string
+
+
+# Dynamic route test function with two variables and .get instead of .route
+@app.get(
+    path='/hello/<first>/<last>'
+)
+@app.get(
+    path='/hello/<first>/<last>/'
+)
+def hello_name_first_last(
+    first: str,
+    last: str
+) -> None:
+    """ Display a custom hello string.
+
+        Args:
+            first (str):
+                First name value to display.
+
+            Last (str):
+                Last name value to display.
+
+        Returns:
+            display_string (str):
+                String to display in a web browser.
+    """
+
+    # Set a string to display
+    display_string = f'Hello {first.title()} {last.title()}'
 
     return display_string
 
