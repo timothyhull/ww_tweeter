@@ -23,5 +23,5 @@ RUN python -m pip install --upgrade pip && \
 ENV PYTHONPATH=/web
 
 # Start the bottle server
-# CMD ["python", "/_dockerfiles/web/__dev__/bottle_testing.py"]
+# CMD ["python", "_dockerfiles/web/__dev__/bottle_testing.py"]
 CMD ["tail", "-f", "/dev/null"]
