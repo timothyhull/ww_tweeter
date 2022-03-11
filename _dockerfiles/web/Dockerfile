@@ -2,7 +2,7 @@
 FROM python:3.10-slim-buster
 
 # Set the working directory
-WORKDIR /workspaces/ww-tweeter
+WORKDIR /web
 
 # Expose the web service port
 EXPOSE 8080/tcp
@@ -20,7 +20,8 @@ RUN python -m pip install --upgrade pip && \
     rm -rf requirements
 
 # Set the PYTHONPATH environment variable
-ENV PYTHONPATH=/workspaces/ww-tweeter
+ENV PYTHONPATH=/web
 
 # Start the bottle server
-CMD ["python", "__dev__/bottle_testing.py"]
+# CMD ["python", "/_dockerfiles/web/__dev__/bottle_testing.py"]
+CMD ["tail", "-f", "/dev/null"]
