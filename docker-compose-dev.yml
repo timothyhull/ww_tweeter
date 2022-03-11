@@ -81,9 +81,10 @@ services:
     ports:
       - 8081:8080/tcp
     volumes:
-      - ./app:/workspaces/ww-tweeter/app
-      - ./tests:/workspaces/ww-tweeter/tests
-      - ./pytest.ini:/workspaces/ww-tweeter/pytest.ini
+      - ./app:/app
+      - ./tests:/tests
+      - ./pytest.ini:/pytest.ini
+      - ./_dockerfiles:/_dockerfiles
 
 volumes:
   db_dev:
