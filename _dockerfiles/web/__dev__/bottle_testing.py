@@ -14,13 +14,13 @@
 # Imports - Python Standard Library
 
 # Imports - Third-Party
-from bottle import route, run  # , template
+from bottle import route, run
 
 # Imports - Local
 
 
 # Hello world test function
-@route
+@route('/')
 def hello_world() -> str:
     """ Display a hello world string.
 
@@ -40,7 +40,7 @@ def hello_world() -> str:
 
 # Call the run function to start the web service
 run(
-    host='localhost',
+    host='0.0.0.0',
     port=8080,
     debug=True
 )
