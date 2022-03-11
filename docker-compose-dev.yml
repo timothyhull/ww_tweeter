@@ -81,10 +81,10 @@ services:
     ports:
       - 8081:8080/tcp
     volumes:
-      - ./app:/app
-      - ./tests:/tests
-      - ./pytest.ini:/pytest.ini
-      - ./_dockerfiles:/_dockerfiles
+      - ./app:/web/app
+      - ./tests:/web/tests
+      - ./pytest.ini:/web/pytest.ini
+      - ./_dockerfiles:/web/_dockerfiles
 
 volumes:
   db_dev:
