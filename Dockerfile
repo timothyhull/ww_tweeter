@@ -22,7 +22,7 @@ RUN python -m pip install --upgrade pip && \
 ENV PYTHONPATH=/workspaces/ww-tweeter
 
 # Expost TCP port 8081 to forward to bottle app on TCP port 8080
-EXPOSE 8080/tcp
+EXPOSE 8081/tcp
 
 # Start the bash prompt
 CMD ["tail", "-f", "/dev/null"]
