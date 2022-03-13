@@ -21,5 +21,8 @@ RUN python -m pip install --upgrade pip && \
 # Set the PYTHONPATH environment variable
 ENV PYTHONPATH=/workspaces/ww-tweeter
 
+# Expost TCP port 8081 to forward to bottle app on TCP port 8080
+EXPOSE 8080/tcp
+
 # Start the bash prompt
 CMD ["tail", "-f", "/dev/null"]
