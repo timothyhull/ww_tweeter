@@ -11,7 +11,7 @@ from bottle import Bottle, run
 
 # Constants
 APP_DEBUG = True
-APP_HOST = '0.0.0.0'
+APP_HOST = 'web'
 APP_PORT = 8080
 
 # Create a bottle object
