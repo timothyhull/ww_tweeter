@@ -59,23 +59,6 @@ services:
       ww-tweeter:
         aliases:
           - app
-    volumes:
-      - ./app:/workspaces/ww-tweeter/app
-      - ./tests:/workspaces/ww-tweeter/tests
-      - ./pytest.ini:/workspaces/ww-tweeter/pytest.ini
-
-  # Bottle web application
-  web:
-    build:
-      context: ./_dockerfiles/web
-    depends_on:
-      - db_admin
-      - db
-      - app
-    networks:
-      ww-tweeter:
-        aliases:
-          - web
     ports:
       - 8081:8080/tcp
     volumes:
