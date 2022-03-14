@@ -240,7 +240,9 @@ def get_tweets(
             filter = search_tag.lower()
 
             # Apply a filter to the tweet data
-            tweets = tweets.filter(TweetData.tweet_text.ilike(filter))
+            tweets = tweets.filter(
+                TweetData.tweet_text.ilike(f'%{filter}%')
+            )
 
     # Return all tweets from the query
     tweets = tweets.all()
