@@ -8,6 +8,7 @@ from typing import Dict
 from bottle import Bottle, run
 
 # Imports - Local
+from app.db import db
 
 # Constants
 APP_DEBUG = True
@@ -18,7 +19,7 @@ APP_PORT = 8080
 app = Bottle()
 
 
-# Function for HTTP requests
+# Function for HTTP request routing
 @app.get(path='/')
 @app.get(path='/<filter>')
 @app.get(path='/<filter>/')
@@ -36,15 +37,23 @@ def tweeter_view(
                 Dict of tweet and hashtag data.
     """
 
-    # Test strings
-    if filter:
-        output = (
-            f'Filter is "{filter}"'
-        )
-    else:
-        output = 'No filter supplied'
+    # Get tweets from the database
+    tweets = db.get_tweets(
+        search_tag=f'#{filter}'
+    )
 
-    return output
+    # Get hashtags from the database
+    hashtags = db.get_hashtags()
+
+    tweets_hashtags = {
+        'filter': filter,
+        'tweets': tweets,
+        'hashtags': hashtags
+    }
+
+    tweets_hashtags = str(f"Tweet count: {len(tweets_hashtags.get('tweets'))}")
+
+    return tweets_hashtags
 
 
 # Run the bottle service
