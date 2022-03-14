@@ -59,6 +59,7 @@ services:
       ww-tweeter:
         aliases:
           - app
+          - web
     ports:
       - 8081:8080/tcp
     volumes:
