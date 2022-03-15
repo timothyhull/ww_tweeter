@@ -49,7 +49,7 @@ app = Bottle()
 # Function for HTTP request routing
 @app.get(path='/')
 @app.get(path='/<filter>')
-@app.get(path='/<filter>/')
+# @app.get(path='/<filter>/')
 def index(
     filter: str = None
 ) -> Dict:
@@ -64,9 +64,12 @@ def index(
                 Dict of tweet and hashtag data.
     """
 
-    # Get tweets from the database
+    # Get tweets from the database, use a filter if present
+    if filter is not None:
+        filter = f'#{filter}'
+    
     tweets = db.get_tweets(
-        search_tag=f'#{filter}'
+        search_tag=filter
     )
 
     # Get hashtags from the database
@@ -80,11 +83,9 @@ def index(
     }
 
     # Temporary return string value for testing
-    '''
     tweets_hashtags = str(
         f"Tweet count: {len(tweets_hashtags.get('tweets'))}"
     )
-    '''
 
     return tweets_hashtags
 
