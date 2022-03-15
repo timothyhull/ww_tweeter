@@ -6,25 +6,16 @@ from typing import Dict, Union
 
 # Imports - Third-Party
 from bottle import (
-    Bottle, HTTPError, HTTPResponse, run, static_file
+    Bottle, HTTPError, HTTPResponse, route, run, static_file
 )
 
 # Imports - Local
 from app.db import db
 
-# Constants
-APP_DEBUG = True
-APP_HOST = 'web'
-APP_PORT = 8080
-STATIC_ROOT = 'app/static'
-
-# Create a bottle object
-app = Bottle()
-
 
 # Setup path to static files
 # Reference: https://bottlepy.org/docs/dev/tutorial.html#static-files
-@app.route('/static/<filename:path>')
+@route('/static/<filename:path>')
 def send_static(filename: str) -> Union[HTTPError, HTTPResponse]:
     """ WW-Tweeter static file route.
 
@@ -39,10 +30,19 @@ def send_static(filename: str) -> Union[HTTPError, HTTPResponse]:
 
     static_file_path = static_file(
         filename=filename,
-        root=STATIC_ROOT
+        root='static'
     )
 
     return static_file_path
+
+
+# Constants
+APP_DEBUG = True
+APP_HOST = 'web'
+APP_PORT = 8080
+
+# Create a bottle object
+app = Bottle()
 
 
 # Function for HTTP request routing
