@@ -2,10 +2,12 @@
 """ Twitter analyzer web view for #100DaysofCode Days 59+60. """
 
 # Imports - Python Standard Library
-from typing import Dict
+from typing import Dict, Union
 
 # Imports - Third-Party
-from bottle import Bottle, run
+from bottle import (
+    Bottle, HTTPError, HTTPResponse, run, static_file
+)
 
 # Imports - Local
 from app.db import db
@@ -14,9 +16,33 @@ from app.db import db
 APP_DEBUG = True
 APP_HOST = 'web'
 APP_PORT = 8080
+STATIC_ROOT = 'app/static'
 
 # Create a bottle object
 app = Bottle()
+
+
+# Setup path to static files
+# Reference: https://bottlepy.org/docs/dev/tutorial.html#static-files
+@app.route('/static/<filename:path>')
+def send_static(filename: str) -> Union[HTTPError, HTTPResponse]:
+    """ WW-Tweeter static file route.
+
+        Args:
+            filename (str):
+                Static file name to load.
+
+        Returns:
+            static_file_path (Union[HTTPError, HTTPResponse]):
+                HTTP Response or HTTP error object.
+    """
+
+    static_file_path = static_file(
+        filename=filename,
+        root=STATIC_ROOT
+    )
+
+    return static_file_path
 
 
 # Function for HTTP request routing
@@ -30,7 +56,7 @@ def tweeter_view(
 
         Args:
             filter (str, optional):
-                Keword filter for search.
+                Keyword filter for search.
 
         Returns:
             tweets_hashtags (Dict):
