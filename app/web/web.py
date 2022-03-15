@@ -40,6 +40,7 @@ def send_static(filename: str) -> Union[HTTPError, HTTPResponse]:
 APP_DEBUG = True
 APP_HOST = 'web'
 APP_PORT = 8080
+APP_RELOADER = True
 
 # Create a bottle object
 app = Bottle()
@@ -71,13 +72,19 @@ def index(
     # Get hashtags from the database
     hashtags = db.get_hashtags()
 
+    # Create response dictionary object
     tweets_hashtags = {
         'filter': filter,
         'tweets': tweets,
         'hashtags': hashtags
     }
 
-    tweets_hashtags = str(f"Tweet count: {len(tweets_hashtags.get('tweets'))}")
+    # Temporary return string value for testing
+    '''
+    tweets_hashtags = str(
+        f"Tweet count: {len(tweets_hashtags.get('tweets'))}"
+    )
+    '''
 
     return tweets_hashtags
 
@@ -87,5 +94,6 @@ run(
     app=app,
     host=APP_HOST,
     port=APP_PORT,
-    debug=APP_DEBUG
+    debug=APP_DEBUG,
+    reloader=APP_RELOADER
 )
