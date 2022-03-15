@@ -49,7 +49,7 @@ def send_static(filename: str) -> Union[HTTPError, HTTPResponse]:
 @app.get(path='/')
 @app.get(path='/<filter>')
 @app.get(path='/<filter>/')
-def tweeter_view(
+def index(
     filter: str = None
 ) -> Dict:
     """ WW-Tweeter web view route.
