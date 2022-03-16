@@ -17,19 +17,20 @@
       <a href="https://twitter.com/wwt_inc" target="_blank">
         <img class="logo" src='https://pbs.twimg.com/profile_images/1356688746939363332/B9cUoIhf_400x400.jpg' alt='PyBites'>
       </a>
-      <a href="https://wwt.com" target="_blank">
-        <img class="logo" src='https://pbs.twimg.com/profile_images/1356688746939363332/B9cUoIhf_400x400.jpg' alt='PyBites'>
-      </a>
     </div>
 
 	<form action="/" method="GET" class="mui-form">
 		<div class="mui-textfield">
-			<input type="text" name="tag" placeholder="Search" value="{{ filter }}">
+    % if filter:
+			<input type="text" name="hashtag" placeholder="Search" value="{{ filter }}">
+    % else:
+      <input type="text" name="hashtag" placeholder="Search" value="">
+    % end
 		</div>
 	</form>
 
 	% for hashtag in hashtags:
-	  <a style="font-size: {{ hashtag.count/10 + 1 }}em;" href="/{{ hashtagtag.name }}">#{{ tag.name }}</a>&nbsp;&nbsp;
+	  <a style="font-size: {{ hashtag.count/10 + 1 }}em;" href="/{{ hashtag.name }}">#{{ hashtag.name }}</a>&nbsp;&nbsp;
 	% end
 	<br>
 	<br>
