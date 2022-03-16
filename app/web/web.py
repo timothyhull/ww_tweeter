@@ -14,6 +14,7 @@ from bottle import (
 
 # Imports - Local
 from app.db import db
+from app.tweeter import tweeter
 
 # Constants
 APP_DEBUG = True
@@ -25,6 +26,11 @@ APP_STATIC_DIR = 'static'
 APP_STATIC_PATH = join(APP_PATH, APP_STATIC_DIR)
 APP_VIEW_DIR = 'views'
 APP_VIEW_PATH = join(APP_PATH, APP_VIEW_DIR)
+RELOAD_TWEETS = False
+
+# Reload tweets from Twitter into the database
+if RELOAD_TWEETS is True:
+    tweeter.main()
 
 # Create a bottle object
 app = Bottle()
