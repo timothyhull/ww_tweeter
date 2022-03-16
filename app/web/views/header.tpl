@@ -22,9 +22,9 @@
 	<form action="/" method="GET" class="mui-form">
 		<div class="mui-textfield">
     % if filter:
-			<input type="text" name="hashtag" placeholder="Search" value="{{ filter }}">
+			<input type="text" name="hashtag" placeholder="Hashtag Search" value="{{ filter }}">
     % else:
-      <input type="text" name="hashtag" placeholder="Search" value="">
+      <input type="text" name="hashtag" placeholder="Hashtag Search" value="">
     % end
 		</div>
 	</form>
