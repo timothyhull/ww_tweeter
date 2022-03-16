@@ -8,18 +8,34 @@ from typing import Dict, Union
 
 # Imports - Third-Party
 from bottle import (
-    Bottle, HTTPError, HTTPResponse, route, run, static_file,
+    Bottle, HTTPError, HTTPResponse, run, static_file,
     TEMPLATE_PATH, view
 )
 
 # Imports - Local
 from app.db import db
 
+# Constants
+APP_DEBUG = True
+APP_HOST = 'web'
+APP_PATH = Path(dirname(__file__))
+APP_PORT = 8080
+APP_RELOADER = True
+APP_STATIC_DIR = 'static'
+APP_STATIC_PATH = join(APP_PATH, APP_STATIC_DIR)
+APP_VIEW_DIR = 'views'
+APP_VIEW_PATH = join(APP_PATH, APP_VIEW_DIR)
+
+# Create a bottle object
+app = Bottle()
+
 
 # Setup path to static files
 # Reference: https://bottlepy.org/docs/dev/tutorial.html#static-files
-@route('/static/<filename:path>')
-def send_static(filename: str) -> Union[HTTPError, HTTPResponse]:
+@app.route(path='/static/<filename:path>')
+def send_static(
+    filename: str
+) -> Union[HTTPError, HTTPResponse]:
     """ WW-Tweeter static file route.
 
         Args:
@@ -33,23 +49,11 @@ def send_static(filename: str) -> Union[HTTPError, HTTPResponse]:
 
     static_file_path = static_file(
         filename=filename,
-        root='/app/web/static'
+        root=APP_STATIC_PATH
     )
 
     return static_file_path
 
-
-# Constants
-APP_DEBUG = True
-APP_HOST = 'web'
-APP_PATH = Path(dirname(__file__))
-APP_PORT = 8080
-APP_RELOADER = True
-APP_VIEW_DIR = 'views'
-APP_VIEW_PATH = join(APP_PATH, APP_VIEW_DIR)
-
-# Create a bottle object
-app = Bottle()
 
 # Set a path to bottle view templates
 TEMPLATE_PATH.insert(0, APP_VIEW_PATH)
