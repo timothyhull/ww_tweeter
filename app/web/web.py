@@ -2,11 +2,14 @@
 """ Twitter analyzer web view for #100DaysofCode Days 59+60. """
 
 # Imports - Python Standard Library
+from os.path import dirname, join
+from pathlib import Path
 from typing import Dict, Union
 
 # Imports - Third-Party
 from bottle import (
-    Bottle, HTTPError, HTTPResponse, route, run, static_file
+    Bottle, HTTPError, HTTPResponse, route, run, static_file,
+    TEMPLATE_PATH, view
 )
 
 # Imports - Local
@@ -30,7 +33,7 @@ def send_static(filename: str) -> Union[HTTPError, HTTPResponse]:
 
     static_file_path = static_file(
         filename=filename,
-        root='static'
+        root='/app/web/static'
     )
 
     return static_file_path
@@ -39,17 +42,24 @@ def send_static(filename: str) -> Union[HTTPError, HTTPResponse]:
 # Constants
 APP_DEBUG = True
 APP_HOST = 'web'
+APP_PATH = Path(dirname(__file__))
 APP_PORT = 8080
 APP_RELOADER = True
+APP_VIEW_DIR = 'views'
+APP_VIEW_PATH = join(APP_PATH, APP_VIEW_DIR)
 
 # Create a bottle object
 app = Bottle()
+
+# Set a path to bottle view templates
+TEMPLATE_PATH.insert(0, APP_VIEW_PATH)
 
 
 # Function for HTTP request routing
 @app.get(path='/')
 @app.get(path='/<filter>')
-# @app.get(path='/<filter>/')
+@app.get(path='/<filter>/')
+@view(tpl_name='index')
 def index(
     filter: str = None
 ) -> Dict:
@@ -67,7 +77,7 @@ def index(
     # Get tweets from the database, use a filter if present
     if filter is not None:
         filter = f'#{filter}'
-    
+
     tweets = db.get_tweets(
         search_tag=filter
     )
@@ -83,9 +93,9 @@ def index(
     }
 
     # Temporary return string value for testing
-    tweets_hashtags = str(
-        f"Tweet count: {len(tweets_hashtags.get('tweets'))}"
-    )
+    # tweets_hashtags = str(
+    #     f"Tweet count: {len(tweets_hashtags.get('tweets'))}"
+    # )
 
     return tweets_hashtags
 
