@@ -8,7 +8,7 @@ from typing import Dict, Union
 
 # Imports - Third-Party
 from bottle import (
-    Bottle, HTTPError, HTTPResponse, run, static_file,
+    Bottle, HTTPError, HTTPResponse, request, run, static_file,
     TEMPLATE_PATH, view
 )
 
@@ -81,6 +81,8 @@ def index(
     # Get tweets from the database, use a filter if present
     if filter is not None:
         filter = f'#{filter}'
+    else:
+        filter = request.query.get('hashtag') or None
 
     tweets = db.get_tweets(
         search_tag=filter
