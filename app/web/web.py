@@ -112,11 +112,25 @@ def index(
     return tweets_hashtags
 
 
-# Run the bottle service
-run(
-    app=app,
-    host=APP_HOST,
-    port=APP_PORT,
-    debug=APP_DEBUG,
-    reloader=APP_RELOADER
-)
+def main() -> None:
+    """ Main program.
+
+        Args:
+            None.
+
+        Returns:
+            None.
+    """
+
+    # Run the bottle service
+    run(
+        app=app,
+        host=APP_HOST,
+        port=APP_PORT,
+        debug=APP_DEBUG,
+        reloader=APP_RELOADER
+    )
+
+
+if __name__ == 'main':
+    main()

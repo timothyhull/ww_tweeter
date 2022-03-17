@@ -14,9 +14,7 @@ import dotenv
 import sqlalchemy
 
 # Imports - Local
-from app.db.db_models import (
-    BASE, Hashtag, TweetData
-)
+from app.db.db_models import BASE, Hashtag, TweetData
 
 # Load environment variables
 env_vars = dotenv.load_dotenv()
@@ -73,9 +71,7 @@ def _create_session() -> sqlalchemy.orm.Session:
     BASE.metadata.create_all(engine)
 
     # Bind the Session class to a database URL
-    Session.configure(
-        bind=engine
-    )
+    Session.configure(bind=engine)
 
     # Create a session class instance
     session = Session()
@@ -277,25 +273,19 @@ def add_tweets(
     elif isinstance(tweets, dict):
         tweets = tweets.items()
     else:
-        raise ValueError(
-            '"tweets" must be of type "list" or "dict"'
-        )
+        raise ValueError('"tweets" must be of type "list" or "dict"')
 
     # Add new tweets to the session object
     for tweet in tweets:
-        session.add(
-            instance=TweetData(
-                tweet_id=tweet.id,
-                tweet_text=tweet.text,
-                created=tweet.created_at,
-                likes=tweet.favorite_count,
-                retweets=tweet.retweet_count
-            )
-        )
+        session.add(instance=TweetData(
+                    tweet_id=tweet.id,
+                    tweet_text=tweet.text,
+                    created=tweet.created_at,
+                    likes=tweet.favorite_count,
+                    retweets=tweet.retweet_count)
+                    )
 
     # Commit the changes to the database
-    session_active = commit_session(
-        session=session
-    )
+    session_active = commit_session(session=session)
 
     return session_active

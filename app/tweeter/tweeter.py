@@ -145,19 +145,13 @@ def main() -> None:
     tweets = list(tweets)
 
     # Add tweets to the database
-    db.add_tweets(
-        tweets=tweets
-    )
+    db.add_tweets(tweets=tweets)
 
     # Collect a count of hashtags
-    hashtag_count = hashtag_counter(
-        tweets=tweets
-    )
+    hashtag_count = hashtag_counter(tweets=tweets)
 
     # Add hashtags to the database
-    db.add_hashtags(
-        hashtags=hashtag_count
-    )
+    db.add_hashtags(hashtags=hashtag_count)
 
     return None
 
