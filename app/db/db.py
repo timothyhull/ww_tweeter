@@ -62,10 +62,7 @@ def _create_session() -> sqlalchemy.orm.Session:
         )
 
     # Create an sqlalchemy.engine.Engine object
-    engine = create_engine(
-        db_url,
-        echo=DB_LOGGING
-    )
+    engine = create_engine(db_url, echo=DB_LOGGING)
 
     # Call the BASE object's create_all method to create database tables
     BASE.metadata.create_all(engine)
