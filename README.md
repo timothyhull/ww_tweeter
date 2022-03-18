@@ -49,57 +49,58 @@ My application uses Docker Compose to build the following components:
 
 To give the application a try for yourself, I recommend the following setup steps:
 
-    1. Clone this repository to an environment with Docker and Docker Compose runtime environments, plus an Internet connection.
-    2. Use your shell prompt to navigate to the cloned repository.
-    3. Create the following **.env** files and populate the variable values with the appropriate information:
+1. Clone this repository to an environment with Docker and Docker Compose runtime environments, plus an Internet connection.
+2. Use your shell prompt to navigate to the cloned repository.
+3. Create the following **.env** files and populate the variable values with the appropriate information:
 
-        ```bash
-        # ./app/.env
-        APP_DB_USER=db_user
-        APP_DB_PASS=
-        APP_LOCATION=local
-        POSTGRES_USER=root
-        POSTGRES_PASSWORD=
-        DB_URL=postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@db:5432/ww_tweeter
-        DB_TEST_URL=postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@db:5432/ww_tweeter_test
-        TWITTER_KEY=
-        TWITTER_SECRET=
-        TWITTER_ACCESS_TOKEN=
-        TWITTER_ACCESS_SECRET=
-        ```
+    ```bash
+    # ./app/.env
+    APP_DB_USER=db_user
+    APP_DB_PASS=
+    APP_LOCATION=local
+    POSTGRES_USER=root
+    POSTGRES_PASSWORD=
+    DB_URL=postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@db:5432/ww_tweeter
+    DB_TEST_URL=postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@db:5432/ww_tweeter_test
+    TWITTER_KEY=
+    TWITTER_SECRET=
+    TWITTER_ACCESS_TOKEN=
+    TWITTER_ACCESS_SECRET=
+    ```
 
-        ```bash
-        # ./dockerfiles/db/.env
-        APP_DB_USER=db_user
-        APP_DB_PASS=
-        POSTGRES_USER=root
-        POSTGRES_PASSWORD=
-        ```
+    ```bash
+    # ./dockerfiles/db/.env
+    APP_DB_USER=db_user
+    APP_DB_PASS=
+    POSTGRES_USER=root
+    POSTGRES_PASSWORD=
+    ```
 
-        ```bash
-        # ./dockerfiles/db_admin/.env
-        PGADMIN_DEFAULT_EMAIL=user@dbadmin.com
-        PGADMIN_DEFAULT_PASSWORD=
-        ```
+    ```bash
+    # ./dockerfiles/db_admin/.env
+    PGADMIN_DEFAULT_EMAIL=user@dbadmin.com
+    PGADMIN_DEFAULT_PASSWORD=
+    ```
 
-    4. Enter the following command in your shell:
+4. Enter the following command in your shell:
 
-        ```bash
-        docker compose up -d
-        ```
-    5. Wait a few minutes for the images to build and for the containers to start.
-    6. Attach to the application container with the following command:
+    ```bash
+    docker compose up -d
+    ```
 
-        ```bash
-        docker exec -it ww-tweeter-app-1 /bin/bash
-        ```
+5. Wait a few minutes for the images to build and for the containers to start.
+6. Attach to the application container with the following command:
 
-    7. Start the Python application with the following command:
+    ```bash
+    docker exec -it ww-tweeter-app-1 /bin/bash
+    ```
 
-        ```bash
-        ./app/tweeter/ww_tweeter.py
-        ```
+7. Start the Python application with the following command:
 
-    8. Navigate to the [web application](http://localhost:8081) with a browser.
+    ```bash
+    ./app/tweeter/ww_tweeter.py
+    ```
+
+8. Navigate to the [web application](http://localhost:8081) with a browser.
 
 Take note that this application is built for learning, development, and testing, so the Python application does not automatically start (via the Dockerfile `CMD` or `ENTRYPOINT` instructions) and `SQLAlchemy` and `bottle` debugging are active.
