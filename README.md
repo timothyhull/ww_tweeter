@@ -17,6 +17,7 @@ The lesson focuses on learning to use the Python `Tweepy` module to interact wit
 Over [roughly two months](https://github.com/timothyhull/100daysofcode/tree/main/days/_59_60), my version of the application gave me extensive practice with topics like:
 
 - Classes, including class inheritance.
+- GitHub Actions
 - `pytest`
 - `Tweepy`
 - `PostgreSQL`
